@@ -41,26 +41,8 @@ const HomePage: React.FC = () => {
 
                 <Box mt={4}>
                     <div className={classes.titleRoom}>
-                        Room List
+                        QUAN LY HOC SINH
                     </div>
-                    <List dense className={classes.boxList}>
-                        {rooms.map((room) => {
-                            const labelId = `checkbox-list-secondary-label-${room.id}`;
-                            return (
-                                <ListItem key={room.id} className={classes.listItemStyle} onClick={() => goToRoom(room.id)}>
-                                    <ListItemAvatar>
-                                        <Avatar>
-                                            <ChatIcon />
-                                        </Avatar>
-                                    </ListItemAvatar>
-                                    <ListItemText id={labelId} primary={room.name} />
-                                    <ListItemSecondaryAction>
-                                        <ArrowForwardIosIcon />
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-                            );
-                        })}
-                    </List>
                 </Box>
             </Container>
         </PrivateRoute>
