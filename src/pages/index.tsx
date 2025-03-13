@@ -41,7 +41,7 @@ const HomePage: React.FC = () => {
 
                 <Box mt={4}>
                     <div className={classes.titleRoom}>
-                        QUAN LY HOC SINH
+                        QUẢN LÝ HỌC SINH
                     </div>
                 </Box>
             </Container>

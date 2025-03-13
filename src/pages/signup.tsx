@@ -1,5 +1,5 @@
 import React, { useState, FormEvent } from "react";
-import { Button, Container, TextField, Link, Typography } from "@mui/material";
+import { Button, Container, TextField, Link, Typography, Select, MenuItem, InputLabel, FormControl } from "@mui/material";
 import { axiosPost } from "../utils/apis/axios";
 import API from "../configs/API";
 import { useDispatch } from "react-redux";
@@ -8,36 +8,41 @@ import Routes from "../utils/Route";
 import { ToastTopHelper } from "@/utils/utils";
 import useStyles from "../styles/sign-up/useSignUpStyle";
 
-interface SignupFormProps {}
+interface SignupFormProps { }
 
 const SignupForm: React.FC<SignupFormProps> = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const router = useRouter();
 
+  const [fullName, setFullName] = useState<string>("");
+  const [gender, setGender] = useState<string>("");
+  const [birthDate, setBirthDate] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+
   const [email, setEmail] = useState<string>("");
-  const [phone, setPhone] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
 
   const validateForm = () => {
-    if (!email || !phone || !password || !confirmPassword) {
-      ToastTopHelper.error("All fields are required");
+    if (!fullName || !email || !password || !confirmPassword || !gender || !birthDate || !address) {
+      ToastTopHelper.error("Tất cả các trường đều là bắt buộc");
       return false;
     }
 
     if (!/\S+@\S+\.\S+/.test(email)) {
-      ToastTopHelper.error("Invalid email address");
-      return false;
-    }
-
-    if (!/^[0-9]+$/.test(phone)) {
-      ToastTopHelper.error("Phone number must contain only digits");
+      ToastTopHelper.error("Địa chỉ email không hợp lệ");
       return false;
     }
 
     if (password !== confirmPassword) {
-      ToastTopHelper.error("Password and Confirm Password do not match");
+      ToastTopHelper.error("Mật khẩu và Xác nhận mật khẩu không khớp");
+      return false;
+    }
+
+    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{6,}$/;
+    if (!passwordPattern.test(password)) {
+      ToastTopHelper.error("Mật khẩu phải có ít nhất 6 ký tự, bao gồm chữ cái, số, 1 chữ cái viết hoa và 1 ký tự đặc biệt");
       return false;
     }
 
@@ -52,10 +57,13 @@ const SignupForm: React.FC<SignupFormProps> = () => {
     }
 
     const { success, data } = await axiosPost(API.AUTH.SIGNUP, {
-      email: email,
-      phone: phone,
+      fullName,
+      email,
       password1: password,
       password2: confirmPassword,
+      gender,
+      birthDate,
+      address,
     });
 
     if (success) {
@@ -70,7 +78,47 @@ const SignupForm: React.FC<SignupFormProps> = () => {
   return (
     <div className={classes.background}>
       <form className={classes.form} onSubmit={handleSubmit}>
-        <Typography className={classes.title}>SIGN UP</Typography>
+        <Typography className={classes.title}>ĐĂNG KÝ</Typography>
+
+        <TextField
+          label="Họ và Tên"
+          fullWidth
+          variant="outlined"
+          margin="normal"
+          value={fullName}
+          onChange={(e) => setFullName(e.target.value)}
+        />
+        <FormControl fullWidth margin="normal">
+          <InputLabel>Giới tính</InputLabel>
+          <Select
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+            label="Giới tính"
+          >
+            <MenuItem value="male">Nam giới</MenuItem>
+            <MenuItem value="female">Nữ giới</MenuItem>
+          </Select>
+        </FormControl>
+        <TextField
+          label="Ngày sinh"
+          fullWidth
+          variant="outlined"
+          margin="normal"
+          type="date"
+          value={birthDate}
+          onChange={(e) => setBirthDate(e.target.value)}
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+        <TextField
+          label="Địa chỉ"
+          fullWidth
+          variant="outlined"
+          margin="normal"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+        />
         <TextField
           label="Email"
           fullWidth
@@ -81,16 +129,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
           onChange={(e) => setEmail(e.target.value)}
         />
         <TextField
-          label="Phone"
-          fullWidth
-          variant="outlined"
-          margin="normal"
-          type="text"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-        />
-        <TextField
-          label="Password"
+          label="Mật khẩu"
           fullWidth
           variant="outlined"
           margin="normal"
@@ -99,7 +138,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <TextField
-          label="Confirm Password"
+          label="Xác nhận mật khẩu"
           fullWidth
           variant="outlined"
           margin="normal"
@@ -114,11 +153,11 @@ const SignupForm: React.FC<SignupFormProps> = () => {
           fullWidth
           className={classes.submitButton}
         >
-          Sign Up
+          Đăng ký
         </Button>
         <div onClick={handleNavigateSignUp} className={classes.signupLink}>
           <Link variant="body2">
-            Already have an account? Sign in
+            Đã có tài khoản? Đăng nhập
           </Link>
         </div>
       </form>

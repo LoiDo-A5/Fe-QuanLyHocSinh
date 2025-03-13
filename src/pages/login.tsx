@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import useStyles from "../styles/login/useLoginStyle";
 import { RootState } from "@/utils/types";
 import { reactLocalStorage } from "reactjs-localstorage";
+import Logo from "../images/logo.png";
 
 const LoginForm: React.FC = () => {
   const classes = useStyles();
@@ -49,8 +50,11 @@ const LoginForm: React.FC = () => {
   return (
     <Container component="main" maxWidth={false} className={classes.root}>
       <Paper elevation={3} className={classes.paper}>
+        <div className={classes.logoContainer}>
+          <Image src={Logo} alt="Logo" className={classes.logo} />
+        </div>
         <Typography component="h1" variant="h5" className={classes.title} >
-          QUAN LY HOC SINH
+          QUẢN LÝ HỌC SINH
         </Typography>
         <form onSubmit={handleSubmit} className={classes.form}>
           <TextField
