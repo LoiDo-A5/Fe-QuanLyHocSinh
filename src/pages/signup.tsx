@@ -16,8 +16,8 @@ const SignupForm: React.FC<SignupFormProps> = () => {
   const router = useRouter();
 
   const [fullName, setFullName] = useState<string>("");
-  const [gender, setGender] = useState<string>("");
-  const [birthDate, setBirthDate] = useState<string>("");
+  const [gender, setGender] = useState<any>(1);
+  const [birthDate, setBirthDate] = useState<any>("");
   const [address, setAddress] = useState<string>("");
 
   const [email, setEmail] = useState<string>("");
@@ -49,6 +49,9 @@ const SignupForm: React.FC<SignupFormProps> = () => {
     return true;
   };
 
+
+  console.log('gender', gender)
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
@@ -57,12 +60,12 @@ const SignupForm: React.FC<SignupFormProps> = () => {
     }
 
     const { success, data } = await axiosPost(API.AUTH.SIGNUP, {
-      fullName,
+      full_name: fullName,
       email,
       password1: password,
       password2: confirmPassword,
       gender,
-      birthDate,
+      birthday: birthDate,
       address,
     });
 
@@ -95,8 +98,8 @@ const SignupForm: React.FC<SignupFormProps> = () => {
             onChange={(e) => setGender(e.target.value)}
             label="Giới tính"
           >
-            <MenuItem value="male">Nam giới</MenuItem>
-            <MenuItem value="female">Nữ giới</MenuItem>
+            <MenuItem value={1}>Nam giới</MenuItem>
+            <MenuItem value={2}>Nữ giới</MenuItem>
           </Select>
         </FormControl>
         <TextField
