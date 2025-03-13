@@ -63,7 +63,7 @@ const LoginForm: React.FC = () => {
             required
             fullWidth
             id="username"
-            label="Username"
+            label="Email"
             name="username"
             autoComplete="username"
             autoFocus
@@ -76,7 +76,7 @@ const LoginForm: React.FC = () => {
             required
             fullWidth
             name="password"
-            label="Password"
+            label="Mật khẩu"
             type="password"
             id="password"
             autoComplete="current-password"
@@ -90,11 +90,11 @@ const LoginForm: React.FC = () => {
             color="primary"
             className={classes.submit}
           >
-            Login
+            Đăng nhập
           </Button>
           <Box mt={2} className={classes.signupLink}>
             <Link variant="body2" onClick={handleNavigateSignUp}>
-              Do not have an account? Sign Up
+              Bạn chưa có tài khoản? Đăng ký
             </Link>
           </Box>
         </form>

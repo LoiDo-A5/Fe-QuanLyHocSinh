@@ -30,6 +30,23 @@ const SignupForm: React.FC<SignupFormProps> = () => {
       return false;
     }
 
+
+    if (fullName.length > 60) {
+      ToastTopHelper.error("Họ và tên không được vượt quá 60 ký tự");
+      return false;
+    }
+
+    const fullNamePattern = /^[A-Za-zÀ-ÿ\s]+$/;
+    if (!fullNamePattern.test(fullName)) {
+      ToastTopHelper.error("Họ và tên không được chứa số");
+      return false;
+    }
+
+    if (address.length > 60) {
+      ToastTopHelper.error("Địa chỉ không được vượt quá 60 ký tự");
+      return false;
+    }
+
     if (!/\S+@\S+\.\S+/.test(email)) {
       ToastTopHelper.error("Địa chỉ email không hợp lệ");
       return false;
