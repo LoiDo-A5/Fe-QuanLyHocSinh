@@ -92,6 +92,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
   };
 
   const handleNavigateSignUp = () => {
+    ToastTopHelper.success("Tạo tài khoản thành công!");
     router.push(Routes.Login);
   };
 
