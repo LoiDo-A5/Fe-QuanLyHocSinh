@@ -8,7 +8,7 @@ import clsx from 'clsx';
 import PersonIcon from '@mui/icons-material/Person';
 
 interface MyAccountNavProps {
-  user: { name: string };
+  user: { full_name: string };
   userProfile: { avatar?: string; avatarUploadFile?: File };
   setUserProfile: React.Dispatch<React.SetStateAction<any>>;
 }
@@ -63,7 +63,7 @@ const MyAccountNav: FC<MyAccountNavProps> = ({ user, userProfile, setUserProfile
       <div
         className={classes.userName}
       >
-        {user?.name}
+        {user?.full_name}
       </div>
 
       <div className={classes.userRole}>

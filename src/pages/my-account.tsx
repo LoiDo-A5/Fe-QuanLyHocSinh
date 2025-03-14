@@ -36,9 +36,8 @@ const MyAccount: React.FC<MyAccountFormProps> = () => {
 
     const defaultUserData: UserProfile = {
         avatar: user?.avatar,
-        full_name: user?.name || '',
+        full_name: user?.full_name || '',
         email: user?.email || '',
-        phone_number: user?.phone_number || '',
     };
 
     const [userProfile, setUserProfile] = React.useState<UserProfile>(defaultUserData);
