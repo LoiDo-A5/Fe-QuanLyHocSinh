@@ -41,6 +41,10 @@ const HeaderPage: React.FC = () => {
     router.push(Routes.MyAccount);
   };
 
+  const handleClickSinUp = () => {
+    router.push(Routes.Signup);
+  }
+
   const goHome = () => {
     router.push(Routes.Home);
   }
@@ -117,15 +121,15 @@ const HeaderPage: React.FC = () => {
               </div>
 
               <Divider />
-              <MenuItem onClick={handleClickMyAccount}>{'My account'}</MenuItem>
+              <MenuItem onClick={handleClickMyAccount}>{'Tài khoản của tôi'}</MenuItem>
               <MenuItem
-                onClick={handleClose}
+                onClick={handleClickSinUp}
                 className={classes.menuItemHelp}
               >
-                {'Help'}
+                {'Tạo tài khoản cho học sinh'}
               </MenuItem>
               <Divider />
-              <MenuItem onClick={handleLogOut}>{'Sign out'}</MenuItem>
+              <MenuItem onClick={handleLogOut}>{'Đăng xuất'}</MenuItem>
             </Menu>
           </div>
         </Toolbar>

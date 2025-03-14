@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import Routes from "../utils/Route";
 import { ToastTopHelper } from "@/utils/utils";
 import useStyles from "../styles/sign-up/useSignUpStyle";
+import PrivateRoute from "@/commons/PrivateRoute";
 
 interface SignupFormProps { }
 
@@ -93,96 +94,98 @@ const SignupForm: React.FC<SignupFormProps> = () => {
 
   const handleNavigateSignUp = () => {
     ToastTopHelper.success("Tạo tài khoản thành công!");
-    router.push(Routes.Login);
+    router.push(Routes.Home);
   };
 
   return (
-    <div className={classes.background}>
-      <form className={classes.form} onSubmit={handleSubmit}>
-        <Typography className={classes.title}>ĐĂNG KÝ</Typography>
+    <PrivateRoute>
+      <div className={classes.background}>
+        <form className={classes.form} onSubmit={handleSubmit}>
+          <Typography className={classes.title}>ĐĂNG KÝ</Typography>
 
-        <TextField
-          label="Họ và Tên"
-          fullWidth
-          variant="outlined"
-          margin="normal"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-        />
-        <FormControl fullWidth margin="normal">
-          <InputLabel>Giới tính</InputLabel>
-          <Select
-            value={gender}
-            onChange={(e) => setGender(e.target.value)}
-            label="Giới tính"
+          <TextField
+            label="Họ và Tên"
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+          />
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Giới tính</InputLabel>
+            <Select
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+              label="Giới tính"
+            >
+              <MenuItem value={1}>Nam giới</MenuItem>
+              <MenuItem value={2}>Nữ giới</MenuItem>
+            </Select>
+          </FormControl>
+          <TextField
+            label="Ngày sinh"
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            type="date"
+            value={birthDate}
+            onChange={(e) => setBirthDate(e.target.value)}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+          <TextField
+            label="Địa chỉ"
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
+          <TextField
+            label="Email"
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <TextField
+            label="Mật khẩu"
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <TextField
+            label="Xác nhận mật khẩu"
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            className={classes.submitButton}
           >
-            <MenuItem value={1}>Nam giới</MenuItem>
-            <MenuItem value={2}>Nữ giới</MenuItem>
-          </Select>
-        </FormControl>
-        <TextField
-          label="Ngày sinh"
-          fullWidth
-          variant="outlined"
-          margin="normal"
-          type="date"
-          value={birthDate}
-          onChange={(e) => setBirthDate(e.target.value)}
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />
-        <TextField
-          label="Địa chỉ"
-          fullWidth
-          variant="outlined"
-          margin="normal"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-        />
-        <TextField
-          label="Email"
-          fullWidth
-          variant="outlined"
-          margin="normal"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <TextField
-          label="Mật khẩu"
-          fullWidth
-          variant="outlined"
-          margin="normal"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <TextField
-          label="Xác nhận mật khẩu"
-          fullWidth
-          variant="outlined"
-          margin="normal"
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          className={classes.submitButton}
-        >
-          Đăng ký
-        </Button>
-        <div onClick={handleNavigateSignUp} className={classes.signupLink}>
-          <Link variant="body2">
-            Đã có tài khoản? Đăng nhập
-          </Link>
-        </div>
-      </form>
-    </div>
+            Đăng ký
+          </Button>
+          <div onClick={handleNavigateSignUp} className={classes.signupLink}>
+            <Link variant="body2">
+              Đã có tài khoản? Đăng nhập
+            </Link>
+          </div>
+        </form>
+      </div>
+    </PrivateRoute>
   );
 };
 

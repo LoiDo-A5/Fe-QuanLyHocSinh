@@ -17,7 +17,7 @@ interface BreadCrumbItem {
 
 interface UserProfile {
     avatar: string;
-    name?: string;
+    full_name?: string;
     email?: string;
     phone_number?: string;
     avatarUploadFile?: any
@@ -36,7 +36,7 @@ const MyAccount: React.FC<MyAccountFormProps> = () => {
 
     const defaultUserData: UserProfile = {
         avatar: user?.avatar,
-        name: user?.name || '',
+        full_name: user?.name || '',
         email: user?.email || '',
         phone_number: user?.phone_number || '',
     };

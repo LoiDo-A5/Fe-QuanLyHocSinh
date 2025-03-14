@@ -92,11 +92,6 @@ const LoginForm: React.FC = () => {
           >
             Đăng nhập
           </Button>
-          <Box mt={2} className={classes.signupLink}>
-            <Link variant="body2" onClick={handleNavigateSignUp}>
-              Bạn chưa có tài khoản? Đăng ký
-            </Link>
-          </Box>
         </form>
       </Paper>
     </Container>
