@@ -37,35 +37,35 @@ const ClassPage: React.FC = () => {
     }, []);
 
     const handleCreateClassLevel = async () => {
-        // if (!newClassLevel) {
-        //   ToastTopHelper.error('Khối lớp không được để trống');
-        //   return;
-        // }
+        if (!newClassLevel) {
+            ToastTopHelper.error('Khối lớp không được để trống');
+            return;
+        }
 
-        // const { success, data } = await axiosPost(API.CLASS.CREATE_LEVEL, { level_name: newClassLevel });
-        // if (success) {
-        //   setClassLevels([...classLevels, data]);
-        //   setNewClassLevel('');
-        //   ToastTopHelper.success('Khối lớp đã được tạo');
-        // }
+        const { success, data } = await axiosPost(API.CLASS.CREATE_LEVEL, { level_name: newClassLevel });
+        if (success) {
+            setClassLevels([...classLevels, data]);
+            setNewClassLevel('');
+            ToastTopHelper.success('Khối lớp đã được tạo');
+        }
     };
 
     const handleCreateClassName = async () => {
-        // if (!newClassName || !selectedLevel) {
-        //   ToastTopHelper.error('Tên lớp và Khối lớp phải được chọn');
-        //   return;
-        // }
+        if (!newClassName || !selectedLevel) {
+            ToastTopHelper.error('Tên lớp và Khối lớp phải được chọn');
+            return;
+        }
 
-        // const { success, data } = await axiosPost(API.CLASS.CREATE_NAME, {
-        //   class_name: newClassName,
-        //   level: selectedLevel,
-        // });
-        // if (success) {
-        //   setClassNames([...classNames, data]);
-        //   setNewClassName('');
-        //   setSelectedLevel('');
-        //   ToastTopHelper.success('Lớp đã được tạo');
-        // }
+        const { success, data } = await axiosPost(API.CLASS.CREATE_NAME, {
+            class_name: newClassName,
+            level: selectedLevel,
+        });
+        if (success) {
+            setClassNames([...classNames, data]);
+            setNewClassName('');
+            setSelectedLevel('');
+            ToastTopHelper.success('Lớp đã được tạo');
+        }
     };
 
     return (
@@ -157,16 +157,21 @@ const ClassPage: React.FC = () => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {classNames.map((className) => (
-                                            <TableRow key={className.id}>
-                                                <TableCell>{className.level.level_name}</TableCell>
-                                                <TableCell>{className.class_name}</TableCell>
-                                            </TableRow>
-                                        ))}
+                                        {classNames.map((className) => {
+                                            const level = classLevels.find(level => level.id === className.level);
+
+                                            return (
+                                                <TableRow key={className.id}>
+                                                    <TableCell>{level ? level.level_name : 'Không có khối'}</TableCell>
+                                                    <TableCell>{className.class_name}</TableCell>
+                                                </TableRow>
+                                            );
+                                        })}
                                     </TableBody>
                                 </Table>
                             </TableContainer>
                         </Grid>
+
                     </Grid>
                 </Container>
             </div>
