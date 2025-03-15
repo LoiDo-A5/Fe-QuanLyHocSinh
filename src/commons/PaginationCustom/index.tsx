@@ -4,7 +4,14 @@ import React from 'react';
 
 import useStyles from './styles';
 
-const PaginationCustom = ({ count, page, onChange, paginationStyle }) => {
+interface PaginationCustomProps {
+  count: number;
+  page: number;
+  onChange: (event: React.ChangeEvent<unknown>, page: number) => void;
+  paginationStyle?: string;
+}
+
+const PaginationCustom: React.FC<PaginationCustomProps> = ({ count, page, onChange, paginationStyle }) => {
   const classes = useStyles();
 
   return (

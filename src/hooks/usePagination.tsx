@@ -1,20 +1,18 @@
-import { useSearchParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 
-const usePagination = (total, pageSize, param = 'page') => {
-  const [searchParams, setSearchParams] = useSearchParams();
+const usePagination = (total: number, pageSize: number, param: string = 'page') => {
+  const router = useRouter();
+  const { query } = router;
 
-  const page = Number(searchParams.get(param)) || 1;
+  const page = Number(query[param]) || 1;
   const totalPage = Math.ceil(total / pageSize);
 
-  const onPageChange = (page) => {
-    if (page <= 1) {
-      searchParams.delete(param);
-      setSearchParams(searchParams);
-      return;
-    }
-
-    searchParams.set(param, page);
-    setSearchParams(searchParams);
+  const onPageChange = (page: number) => {
+    // Cập nhật tham số URL khi thay đổi trang
+    router.push({
+      pathname: router.pathname,
+      query: { ...query, [param]: page }, // Thêm hoặc cập nhật tham số trang
+    });
   };
 
   return { page, totalPage, onPageChange };

@@ -4,30 +4,37 @@ import PrivateRoute from '@/commons/PrivateRoute';
 import { Container, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { axiosGet } from '@/utils/apis/axios';
 import API from '@/configs/API';
-
+import PaginationCustom from '@/commons/PaginationCustom';
+import usePagination from '@/hooks/usePagination';
 
 const HomePage: React.FC = () => {
     const classes = useStyles();
     const [users, setUsers] = useState<any>([]);
 
-    console.log('users', users)
-
+    const { page, totalPage, onPageChange } = usePagination(users?.count || 0, users?.page_size || 10);
 
     const getListUser = async () => {
-        const { success, data } = await axiosGet(API.AUTH.LIST_USER);
+        const { success, data } = await axiosGet(API.AUTH.LIST_USER, {
+            params: {
+                page,
+                page_size: 10
+            }
+        });
+
         if (success) {
             setUsers(data);
         }
     };
 
+    const handlePageChange = (_, newPage: number) => {
+        onPageChange(newPage);
+    };
 
-    const listUser = users?.results || []
-
+    const listUser = users?.results || [];
 
     useEffect(() => {
         getListUser();
-    }, []);
-
+    }, [page]);
 
     return (
         <PrivateRoute>
@@ -53,9 +60,7 @@ const HomePage: React.FC = () => {
                                 <TableRow key={user.id}>
                                     <TableCell>{user.id}</TableCell>
                                     <TableCell>{user.full_name}</TableCell>
-                                    <TableCell>
-                                        {user.gender === 0 ? 'Nam' : 'Nữ'}
-                                    </TableCell>
+                                    <TableCell>{user.gender === 0 ? 'Nam' : 'Nữ'}</TableCell>
                                     <TableCell>{user.birthday}</TableCell>
                                     <TableCell>{user.address}</TableCell>
                                     <TableCell>{user.email}</TableCell>
@@ -64,6 +69,15 @@ const HomePage: React.FC = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
+
+                {!!totalPage && (
+                    <PaginationCustom
+                        paginationStyle={classes.pagination}
+                        count={totalPage}
+                        page={page}
+                        onChange={handlePageChange} // Pass onPageChange to handle page changes
+                    />
+                )}
             </Container>
         </PrivateRoute>
     );

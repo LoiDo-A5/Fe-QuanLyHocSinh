@@ -29,6 +29,14 @@ const useStyles = makeStyles((theme) => ({
     border: `1px solid ${Colors.Grey4}`,
     cursor: "pointer",
   },
+  pagination: {
+    '&.MuiPagination-root': {
+      marginTop: 40,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+  },
 }));
 
 export default useStyles;
