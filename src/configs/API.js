@@ -19,6 +19,11 @@ const API = {
     REQUEST_FRIEND: `${API_ROOT}/accounts/friendship/`,
     FRIENDS_LIST: `${API_ROOT}/accounts/friendship/friends_list/`,
   },
-};
+  CLASS: {
+    LEVELS: `${API_ROOT}/accounts/class_level/`,
+    NAMES: `${API_ROOT}/accounts/class_name/`,
+    CREATE_LEVEL: `${API_ROOT}/accounts/class_levels/create/`, // Endpoint tạo mới khối lớp
+    CREATE_NAME: `${API_ROOT}/accounts/class_names/create/`, // Endpoint tạo mới lớp học
+  },};
 
 export default API;

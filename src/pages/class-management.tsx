@@ -19,14 +19,14 @@ const ClassPage: React.FC = () => {
     // Fetch ClassLevels and ClassNames
     useEffect(() => {
         const fetchClassLevels = async () => {
-            const { success, data } = await axiosGet();
+            const { success, data } = await axiosGet(API.CLASS.LEVELS);
             if (success) {
                 setClassLevels(data);
             }
         };
 
         const fetchClassNames = async () => {
-            const { success, data } = await axiosGet();
+            const { success, data } = await axiosGet(API.CLASS.NAMES);
             if (success) {
                 setClassNames(data);
             }
