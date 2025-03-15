@@ -1,0 +1,177 @@
+import React, { useEffect, useState } from 'react';
+import { Button, Container, Grid, TextField, Typography, Select, MenuItem, InputLabel, FormControl, Table, TableHead, TableBody, TableRow, TableCell, TableContainer, Paper } from '@mui/material';
+import { axiosGet, axiosPost } from '../utils/apis/axios';
+import API from '../configs/API';
+import { ToastTopHelper } from '@/utils/utils';
+import { useRouter } from 'next/router';
+import PrivateRoute from '@/commons/PrivateRoute';
+import useStyles from "../styles/class-management/useClassManagementStyle";
+
+const ClassPage: React.FC = () => {
+    const classes = useStyles();
+    const [classLevels, setClassLevels] = useState<any[]>([]);
+    const [classNames, setClassNames] = useState<any[]>([]);
+    const [newClassLevel, setNewClassLevel] = useState<string>('');
+    const [newClassName, setNewClassName] = useState<string>('');
+    const [selectedLevel, setSelectedLevel] = useState<string>('');
+    const router = useRouter();
+
+    // Fetch ClassLevels and ClassNames
+    useEffect(() => {
+        const fetchClassLevels = async () => {
+            const { success, data } = await axiosGet();
+            if (success) {
+                setClassLevels(data);
+            }
+        };
+
+        const fetchClassNames = async () => {
+            const { success, data } = await axiosGet();
+            if (success) {
+                setClassNames(data);
+            }
+        };
+
+        fetchClassLevels();
+        fetchClassNames();
+    }, []);
+
+    const handleCreateClassLevel = async () => {
+        // if (!newClassLevel) {
+        //   ToastTopHelper.error('Khối lớp không được để trống');
+        //   return;
+        // }
+
+        // const { success, data } = await axiosPost(API.CLASS.CREATE_LEVEL, { level_name: newClassLevel });
+        // if (success) {
+        //   setClassLevels([...classLevels, data]);
+        //   setNewClassLevel('');
+        //   ToastTopHelper.success('Khối lớp đã được tạo');
+        // }
+    };
+
+    const handleCreateClassName = async () => {
+        // if (!newClassName || !selectedLevel) {
+        //   ToastTopHelper.error('Tên lớp và Khối lớp phải được chọn');
+        //   return;
+        // }
+
+        // const { success, data } = await axiosPost(API.CLASS.CREATE_NAME, {
+        //   class_name: newClassName,
+        //   level: selectedLevel,
+        // });
+        // if (success) {
+        //   setClassNames([...classNames, data]);
+        //   setNewClassName('');
+        //   setSelectedLevel('');
+        //   ToastTopHelper.success('Lớp đã được tạo');
+        // }
+    };
+
+    return (
+        <PrivateRoute>
+            <div className={classes.wrapContainer}>
+                <Container maxWidth="lg">
+                    <Typography variant="h4" gutterBottom>
+                        Quản lý Khối Lớp và Lớp Học
+                    </Typography>
+                    <Grid container spacing={4}>
+                        {/* Khối lớp */}
+                        <Grid item xs={12} md={6}>
+                            <Typography variant="h6">Tạo Khối Lớp Mới</Typography>
+                            <TextField
+                                label="Tên Khối Lớp"
+                                fullWidth
+                                variant="outlined"
+                                value={newClassLevel}
+                                onChange={(e) => setNewClassLevel(e.target.value)}
+                                margin="normal"
+                            />
+                            <Button variant="contained" color="primary" fullWidth onClick={handleCreateClassLevel}>
+                                Tạo Khối Lớp
+                            </Button>
+                        </Grid>
+
+                        {/* Lớp học */}
+                        <Grid item xs={12} md={6}>
+                            <Typography variant="h6">Tạo Lớp Mới</Typography>
+                            <FormControl fullWidth variant="outlined" margin="normal">
+                                <InputLabel>Chọn Khối Lớp</InputLabel>
+                                <Select
+                                    value={selectedLevel}
+                                    onChange={(e) => setSelectedLevel(e.target.value)}
+                                    label="Chọn Khối Lớp"
+                                >
+                                    {classLevels.map((level) => (
+                                        <MenuItem key={level.id} value={level.id}>
+                                            {level.level_name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                            <TextField
+                                label="Tên Lớp"
+                                fullWidth
+                                variant="outlined"
+                                value={newClassName}
+                                onChange={(e) => setNewClassName(e.target.value)}
+                                margin="normal"
+                            />
+                            <Button variant="contained" color="primary" fullWidth onClick={handleCreateClassName}>
+                                Tạo Lớp
+                            </Button>
+                        </Grid>
+                    </Grid>
+
+                    <Grid container spacing={4} mt={4}>
+                        {/* Danh sách Khối Lớp */}
+                        <Grid item xs={12} md={6}>
+                            <Typography variant="h6">Danh Sách Khối Lớp</Typography>
+                            <TableContainer component={Paper}>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Khối Lớp</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {classLevels.map((level) => (
+                                            <TableRow key={level.id}>
+                                                <TableCell>{level.level_name}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Grid>
+
+                        {/* Danh sách Lớp Học */}
+                        <Grid item xs={12} md={6}>
+                            <Typography variant="h6">Danh Sách Lớp</Typography>
+                            <TableContainer component={Paper}>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Khối Lớp</TableCell>
+                                            <TableCell>Lớp Học</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {classNames.map((className) => (
+                                            <TableRow key={className.id}>
+                                                <TableCell>{className.level.level_name}</TableCell>
+                                                <TableCell>{className.class_name}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Grid>
+                    </Grid>
+                </Container>
+            </div>
+        </PrivateRoute >
+    );
+};
+
+export default ClassPage;

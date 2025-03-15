@@ -89,7 +89,8 @@ const SignupForm: React.FC<SignupFormProps> = () => {
 
     if (success) {
       ToastTopHelper.success("Tạo tài khoản thành công!");
-      router.push(Routes.Home);    }
+      router.push(Routes.Home);
+    }
   };
 
 

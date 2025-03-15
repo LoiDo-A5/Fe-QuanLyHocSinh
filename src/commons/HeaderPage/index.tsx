@@ -49,6 +49,10 @@ const HeaderPage: React.FC = () => {
     router.push(Routes.Home);
   }
 
+  const handleClickClassManage = () => {
+    router.push(Routes.ClassManagement);
+  };
+
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -121,12 +125,18 @@ const HeaderPage: React.FC = () => {
               </div>
 
               <Divider />
-              <MenuItem onClick={handleClickMyAccount}>{'Tài khoản của tôi'}</MenuItem>
+              <MenuItem className={classes.menuItemHelp} onClick={handleClickMyAccount}>{'Tài khoản của tôi'}</MenuItem>
               <MenuItem
                 onClick={handleClickSinUp}
                 className={classes.menuItemHelp}
               >
                 {'Tạo tài khoản cho học sinh'}
+              </MenuItem>
+              <MenuItem
+                onClick={handleClickClassManage}
+                className={classes.menuItemHelp}
+              >
+                {'Tạo khối lớp và lớp học'}
               </MenuItem>
               <Divider />
               <MenuItem onClick={handleLogOut}>{'Đăng xuất'}</MenuItem>
