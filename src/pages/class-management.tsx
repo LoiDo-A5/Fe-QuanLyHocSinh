@@ -42,6 +42,13 @@ const ClassPage: React.FC = () => {
             return;
         }
 
+        // Validate level_name phải là một số nguyên từ 1 đến 12
+        const levelNumber = parseInt(newClassLevel, 10);
+        if (isNaN(levelNumber) || levelNumber < 1 || levelNumber > 12) {
+            ToastTopHelper.error('Khối lớp phải là một số nguyên từ 1 đến 12');
+            return;
+        }
+
         const { success, data } = await axiosPost(API.CLASS.CREATE_LEVEL, { level_name: newClassLevel });
         if (success) {
             setClassLevels([...classLevels, data]);
@@ -50,9 +57,16 @@ const ClassPage: React.FC = () => {
         }
     };
 
+
     const handleCreateClassName = async () => {
         if (!newClassName || !selectedLevel) {
             ToastTopHelper.error('Tên lớp và Khối lớp phải được chọn');
+            return;
+        }
+
+        const classNamePattern = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{2,}$/;
+        if (!classNamePattern.test(newClassName)) {
+            ToastTopHelper.error('Tên lớp phải có ít nhất 2 ký tự, gồm ít nhất 1 chữ và 1 số');
             return;
         }
 
@@ -67,6 +81,7 @@ const ClassPage: React.FC = () => {
             ToastTopHelper.success('Lớp đã được tạo');
         }
     };
+
 
     return (
         <PrivateRoute>

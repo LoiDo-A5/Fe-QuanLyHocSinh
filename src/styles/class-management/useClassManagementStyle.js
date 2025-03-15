@@ -6,6 +6,7 @@ const useStyles = makeStyles(() => ({
     paddingTop: 100,
     background: Colors.Grey1,
     minHeight: "90vh",
+    marginBottom: 20,
   },
 }));
 
