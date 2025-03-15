@@ -75,7 +75,7 @@ const HomePage: React.FC = () => {
                         paginationStyle={classes.pagination}
                         count={totalPage}
                         page={page}
-                        onChange={handlePageChange} // Pass onPageChange to handle page changes
+                        onChange={handlePageChange}
                     />
                 )}
             </Container>
