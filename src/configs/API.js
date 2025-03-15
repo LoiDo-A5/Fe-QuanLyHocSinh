@@ -6,7 +6,7 @@ const API = {
     SIGNUP: `${API_ROOT}/accounts/register/phone/`,
     ACCOUNT_INFO: `${API_ROOT}/accounts/me/`,
     TOKEN_REFRESH: `${API_ROOT}/accounts/token/refresh/`,
-    LIST_USER: `${API_ROOT}/accounts/list_user/`,
+    LIST_USER: `${API_ROOT}/accounts/user/`,
   },
   ROOM: {
     LIST_ROOM: `${API_ROOT}/accounts/rooms/`,

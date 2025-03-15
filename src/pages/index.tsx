@@ -1,49 +1,69 @@
 import React, { useEffect, useState } from 'react';
 import useStyles from '../styles/list-room/useListRoomStyle';
 import PrivateRoute from '@/commons/PrivateRoute';
+import { Container, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { axiosGet } from '@/utils/apis/axios';
 import API from '@/configs/API';
-import { List, ListItem, ListItemText, ListItemAvatar, Avatar, Container, Box, ListItemSecondaryAction } from '@mui/material';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import ChatIcon from '@mui/icons-material/Chat';
-import { useRouter } from 'next/router';
 
-interface Room {
-    id: number;
-    name: string;
-}
 
 const HomePage: React.FC = () => {
     const classes = useStyles();
-    const [rooms, setRooms] = useState<Room[]>([]);
+    const [users, setUsers] = useState<any>([]);
 
-    const router = useRouter();
+    console.log('users', users)
 
-    const goToRoom = (roomId: number) => {
-        router.push(`/room/${roomId}`);
+
+    const getListUser = async () => {
+        const { success, data } = await axiosGet(API.AUTH.LIST_USER);
+        if (success) {
+            setUsers(data);
+        }
     };
 
-    const getListRoom = async () => {
-        const { success, data } = await axiosGet(API.ROOM.LIST_ROOM);
-        if (success) {
-            setRooms(data)
-        }
-    }
+
+    const listUser = users?.results || []
 
 
     useEffect(() => {
-        getListRoom()
+        getListUser();
     }, []);
+
 
     return (
         <PrivateRoute>
             <Container className={classes.background}>
-
                 <Box mt={4}>
-                    <div className={classes.titleRoom}>
-                        QUẢN LÝ HỌC SINH
-                    </div>
+                    <div className={classes.titleRoom}>QUẢN LÝ HỌC SINH</div>
                 </Box>
+
+                <TableContainer component={Paper} sx={{ marginTop: 4 }}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>ID</TableCell>
+                                <TableCell>Họ và tên</TableCell>
+                                <TableCell>Giới tính</TableCell>
+                                <TableCell>Ngày sinh</TableCell>
+                                <TableCell>Địa chỉ</TableCell>
+                                <TableCell>Email</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {listUser.map((user) => (
+                                <TableRow key={user.id}>
+                                    <TableCell>{user.id}</TableCell>
+                                    <TableCell>{user.full_name}</TableCell>
+                                    <TableCell>
+                                        {user.gender === 0 ? 'Nam' : 'Nữ'}
+                                    </TableCell>
+                                    <TableCell>{user.birthday}</TableCell>
+                                    <TableCell>{user.address}</TableCell>
+                                    <TableCell>{user.email}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </Container>
         </PrivateRoute>
     );

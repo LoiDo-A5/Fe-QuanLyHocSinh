@@ -17,7 +17,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
   const router = useRouter();
 
   const [fullName, setFullName] = useState<string>("");
-  const [gender, setGender] = useState<any>(1);
+  const [gender, setGender] = useState<any>(0);
   const [birthDate, setBirthDate] = useState<any>("");
   const [address, setAddress] = useState<string>("");
 
@@ -88,14 +88,11 @@ const SignupForm: React.FC<SignupFormProps> = () => {
     });
 
     if (success) {
-      router.push(Routes.Home);
-    }
+      ToastTopHelper.success("Tạo tài khoản thành công!");
+      router.push(Routes.Home);    }
   };
 
-  const handleNavigateSignUp = () => {
-    ToastTopHelper.success("Tạo tài khoản thành công!");
-    router.push(Routes.Home);
-  };
+
 
   return (
     <PrivateRoute>
@@ -118,8 +115,8 @@ const SignupForm: React.FC<SignupFormProps> = () => {
               onChange={(e) => setGender(e.target.value)}
               label="Giới tính"
             >
-              <MenuItem value={1}>Nam giới</MenuItem>
-              <MenuItem value={2}>Nữ giới</MenuItem>
+              <MenuItem value={0}>Nam giới</MenuItem>
+              <MenuItem value={1}>Nữ giới</MenuItem>
             </Select>
           </FormControl>
           <TextField
@@ -178,11 +175,6 @@ const SignupForm: React.FC<SignupFormProps> = () => {
           >
             Đăng ký
           </Button>
-          <div onClick={handleNavigateSignUp} className={classes.signupLink}>
-            <Link variant="body2">
-              Đã có tài khoản? Đăng nhập
-            </Link>
-          </div>
         </form>
       </div>
     </PrivateRoute>
