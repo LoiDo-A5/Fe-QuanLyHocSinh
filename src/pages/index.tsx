@@ -24,8 +24,6 @@ const HomePage: React.FC = () => {
         }
     };
 
-    console.log('classesList', classesList)
-
     const getStudentsInClass = async () => {
         if (!selectedClass) return;
 

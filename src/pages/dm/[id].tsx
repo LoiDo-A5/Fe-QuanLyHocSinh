@@ -73,7 +73,6 @@ const DirectMessage: React.FC = () => {
                 <List className={classes.messageList}>
                     {listMessages.map((msg, index) => {
                         const isMe = user.id === msg.sender.id;
-                        console.log('111111111111isMe', msg)
                         const formattedTimestamp = moment(msg.timestamp).format('HH:mm DD/MM/YYYY');
                         return (
                             <ListItem key={index} className={isMe ? classes.myMessage : classes.otherMessage}>

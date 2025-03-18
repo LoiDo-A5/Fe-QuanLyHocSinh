@@ -22,8 +22,6 @@ const SignupForm: React.FC<SignupFormProps> = () => {
   const [address, setAddress] = useState<string>("");
   const [email, setEmail] = useState<string>("");
 
-  console.log('111', fullName, email, gender, birthDate, address)
-
   const validateForm = () => {
     if (!fullName || !email || !gender || !birthDate || !address) {
       ToastTopHelper.error("Tất cả các trường đều là bắt buộc");
