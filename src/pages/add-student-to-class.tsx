@@ -11,12 +11,11 @@ const AddStudentClass: React.FC = () => {
     const classes = useStyles();
     const [classLevels, setClassLevels] = useState<any[]>([]);
     const [classNames, setClassNames] = useState<any[]>([]);
-    const [students, setStudents] = useState<any[]>([]);  // State to hold student data
-    const [selectedStudent, setSelectedStudent] = useState<any>(null);  // Changed to object for autocomplete
+    const [students, setStudents] = useState<any[]>([]);
+    const [selectedStudent, setSelectedStudent] = useState<any>(null);
     const [selectedClassName, setSelectedClassName] = useState<string>('');
     const router = useRouter();
 
-    // Fetch ClassLevels, ClassNames, and Students
     useEffect(() => {
         const fetchClassLevels = async () => {
             const { success, data } = await axiosGet(API.CLASS.LEVELS);
@@ -51,13 +50,13 @@ const AddStudentClass: React.FC = () => {
         }
 
         const { success, data } = await axiosPost(API.CLASS.ADD_STUDENT, {
-            student_id: selectedStudent.id,  // Using the object (id) from Autocomplete
+            student_id: selectedStudent.id,
             class_id: selectedClassName,
         });
 
         if (success) {
             ToastTopHelper.success('Học sinh đã được thêm vào lớp');
-            setSelectedStudent(null); // Reset the selected student
+            setSelectedStudent(null);
             setSelectedClassName('');
         } else {
             ToastTopHelper.error('Thêm học sinh vào lớp thất bại');
