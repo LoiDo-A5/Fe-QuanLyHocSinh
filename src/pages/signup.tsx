@@ -17,10 +17,12 @@ const SignupForm: React.FC<SignupFormProps> = () => {
   const router = useRouter();
 
   const [fullName, setFullName] = useState<string>("");
-  const [gender, setGender] = useState<any>(0);
+  const [gender, setGender] = useState<any>('man');
   const [birthDate, setBirthDate] = useState<any>("");
   const [address, setAddress] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+
+  console.log('111', fullName, email, gender, birthDate, address)
 
   const validateForm = () => {
     if (!fullName || !email || !gender || !birthDate || !address) {
@@ -64,7 +66,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
     const { success, data } = await axiosPost(API.AUTH.SIGNUP, {
       full_name: fullName,
       email,
-      gender,
+      gender: gender === 'man' ? 0 : 1,
       birthday: birthDate,
       address,
     });
@@ -98,8 +100,8 @@ const SignupForm: React.FC<SignupFormProps> = () => {
               onChange={(e) => setGender(e.target.value)}
               label="Giới tính"
             >
-              <MenuItem value={0}>Nam giới</MenuItem>
-              <MenuItem value={1}>Nữ giới</MenuItem>
+              <MenuItem value={'man'}>Nam giới</MenuItem>
+              <MenuItem value={'female'}>Nữ giới</MenuItem>
             </Select>
           </FormControl>
           <TextField
