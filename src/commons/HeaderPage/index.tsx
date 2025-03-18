@@ -53,6 +53,10 @@ const HeaderPage: React.FC = () => {
     router.push(Routes.ClassManagement);
   };
 
+  const handleClickAddStudentToClass = () => {
+    router.push(Routes.AddStudentToClass);
+  }
+
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -137,6 +141,13 @@ const HeaderPage: React.FC = () => {
                 className={classes.menuItemHelp}
               >
                 {'Tạo khối lớp và lớp học'}
+              </MenuItem>
+
+              <MenuItem
+                onClick={handleClickAddStudentToClass}
+                className={classes.menuItemHelp}
+              >
+                {'Thêm học sinh vào lớp học'}
               </MenuItem>
               <Divider />
               <MenuItem onClick={handleLogOut}>{'Đăng xuất'}</MenuItem>
