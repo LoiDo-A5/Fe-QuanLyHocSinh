@@ -25,6 +25,7 @@ const API = {
     CREATE_LEVEL: `${API_ROOT}/accounts/class_level/`,
     CREATE_NAME: `${API_ROOT}/accounts/class_name/`,
     ADD_STUDENT: `${API_ROOT}/accounts/add_student_to_class/`,
+    CLASS_LIST: `${API_ROOT}/accounts/class_list/`,
   },
 };
 
