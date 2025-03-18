@@ -6,6 +6,7 @@ import { axiosGet } from '@/utils/apis/axios';
 import API from '@/configs/API';
 import PaginationCustom from '@/commons/PaginationCustom';
 import usePagination from '@/hooks/usePagination';
+import moment from 'moment';
 
 const HomePage: React.FC = () => {
     const classes = useStyles();
@@ -22,6 +23,8 @@ const HomePage: React.FC = () => {
             setClassesList(data);
         }
     };
+
+    console.log('classesList', classesList)
 
     const getStudentsInClass = async () => {
         if (!selectedClass) return;
@@ -62,8 +65,8 @@ const HomePage: React.FC = () => {
     return (
         <PrivateRoute>
             <Container className={classes.background}>
-                <Box mt={4}>
-                    <div className={classes.titleRoom}>QUẢN LÝ LỚP</div>
+                <Box mt={4} mb={2}>
+                    <div className={classes.titleRoom}>DANH SÁCH LỚP</div>
                 </Box>
 
                 <FormControl fullWidth sx={{ marginBottom: 4 }}>
@@ -77,14 +80,14 @@ const HomePage: React.FC = () => {
                     >
                         {classesList.map((classItem) => (
                             <MenuItem key={classItem.id} value={classItem.id}>
-                                {classItem.class_name} - Sĩ số: {classItem.number_of_students}
+                                {`${classItem.level_name}${classItem.class_name}`}  - Sĩ số: {classItem.number_of_students}
                             </MenuItem>
                         ))}
                     </Select>
                 </FormControl>
 
                 <TableContainer component={Paper} sx={{ marginTop: 4 }}>
-                    <Table>
+                     <Table>
                         <TableHead>
                             <TableRow>
                                 <TableCell>ID</TableCell>
@@ -100,7 +103,7 @@ const HomePage: React.FC = () => {
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>{student.full_name}</TableCell>
                                     <TableCell>{student.gender === 0 ? 'Nam' : 'Nữ'}</TableCell>
-                                    <TableCell>{student.birthday}</TableCell>
+                                    <TableCell>{moment(student.birthday).format('DD/MM/YYYY')}</TableCell>
                                     <TableCell>{student.address}</TableCell>
                                 </TableRow>
                             ))}

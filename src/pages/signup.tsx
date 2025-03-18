@@ -20,13 +20,10 @@ const SignupForm: React.FC<SignupFormProps> = () => {
   const [gender, setGender] = useState<any>(0);
   const [birthDate, setBirthDate] = useState<any>("");
   const [address, setAddress] = useState<string>("");
-
   const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
 
   const validateForm = () => {
-    if (!fullName || !email || !password || !confirmPassword || !gender || !birthDate || !address) {
+    if (!fullName || !email || !gender || !birthDate || !address) {
       ToastTopHelper.error("Tất cả các trường đều là bắt buộc");
       return false;
     }
@@ -53,22 +50,9 @@ const SignupForm: React.FC<SignupFormProps> = () => {
       return false;
     }
 
-    if (password !== confirmPassword) {
-      ToastTopHelper.error("Mật khẩu và Xác nhận mật khẩu không khớp");
-      return false;
-    }
-
-    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{6,}$/;
-    if (!passwordPattern.test(password)) {
-      ToastTopHelper.error("Mật khẩu phải có ít nhất 6 ký tự, bao gồm chữ cái, số, 1 chữ cái viết hoa và 1 ký tự đặc biệt");
-      return false;
-    }
-
     return true;
   };
 
-
-  console.log('gender', gender)
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -80,8 +64,6 @@ const SignupForm: React.FC<SignupFormProps> = () => {
     const { success, data } = await axiosPost(API.AUTH.SIGNUP, {
       full_name: fullName,
       email,
-      password1: password,
-      password2: confirmPassword,
       gender,
       birthday: birthDate,
       address,
@@ -148,24 +130,6 @@ const SignupForm: React.FC<SignupFormProps> = () => {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-          />
-          <TextField
-            label="Mật khẩu"
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <TextField
-            label="Xác nhận mật khẩu"
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
           />
           <Button
             type="submit"
