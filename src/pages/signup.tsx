@@ -21,6 +21,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
   const [birthDate, setBirthDate] = useState<any>("");
   const [address, setAddress] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [birthDateError, setBirthDateError] = useState<string>("");
 
   const validateForm = () => {
     if (!fullName || !email || !gender || !birthDate || !address) {
@@ -28,15 +29,14 @@ const SignupForm: React.FC<SignupFormProps> = () => {
       return false;
     }
 
-
     if (fullName.length > 60) {
       ToastTopHelper.error("Họ và tên không được vượt quá 60 ký tự");
       return false;
     }
 
-    const fullNamePattern = /^[A-Za-zÀ-ÿ\s]+$/;
+    const fullNamePattern = /^[A-Z][a-z]+(\s[A-Z][a-z]?){0,}/;
     if (!fullNamePattern.test(fullName)) {
-      ToastTopHelper.error("Họ và tên không được chứa số");
+      ToastTopHelper.error("Họ và tên không được chứa số hoặc ký tự không hợp lệ");
       return false;
     }
 
@@ -50,9 +50,29 @@ const SignupForm: React.FC<SignupFormProps> = () => {
       return false;
     }
 
+    if (birthDateError) {
+      ToastTopHelper.error(birthDateError);
+      return false;
+    }
+
     return true;
   };
 
+  const handleBirthDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const birthDateValue = event.target.value;
+    setBirthDate(birthDateValue);
+
+    const today = new Date();
+    const birthDateObj = new Date(birthDateValue);
+    const age = today.getFullYear() - birthDateObj.getFullYear();
+    const month = today.getMonth() - birthDateObj.getMonth();
+
+    if (age < 15 || age > 20 || (age === 15 && month < 0) || (age === 20 && month > 0)) {
+      setBirthDateError("Tuổi phải từ 15 đến 20.");
+    } else {
+      setBirthDateError("");
+    }
+  };
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -74,8 +94,6 @@ const SignupForm: React.FC<SignupFormProps> = () => {
       router.push(Routes.Home);
     }
   };
-
-
 
   return (
     <PrivateRoute>
@@ -109,10 +127,12 @@ const SignupForm: React.FC<SignupFormProps> = () => {
             margin="normal"
             type="date"
             value={birthDate}
-            onChange={(e) => setBirthDate(e.target.value)}
+            onChange={handleBirthDateChange}
             InputLabelProps={{
               shrink: true,
             }}
+            error={!!birthDateError} // Thêm error khi có lỗi
+            helperText={birthDateError} // Hiển thị lỗi
           />
           <TextField
             label="Địa chỉ"
