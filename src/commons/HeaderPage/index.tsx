@@ -57,9 +57,12 @@ const HeaderPage: React.FC = () => {
     router.push(Routes.AddStudentToClass);
   }
 
-
   const handleClickSubject = () => {
     router.push(Routes.Subject);
+  }
+
+  const handleClickSubjectScore = () => {
+    router.push(Routes.SubjectScore);
   }
 
 
@@ -161,6 +164,14 @@ const HeaderPage: React.FC = () => {
                 className={classes.menuItemHelp}
               >
                 {'Quản lý môn học'}
+              </MenuItem>
+
+
+              <MenuItem
+                onClick={handleClickSubjectScore}
+                className={classes.menuItemHelp}
+              >
+                {'Nhập điểm môn học cho học sinh'}
               </MenuItem>
               <Divider />
               <MenuItem onClick={handleLogOut}>{'Đăng xuất'}</MenuItem>

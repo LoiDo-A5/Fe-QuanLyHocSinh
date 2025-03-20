@@ -7,6 +7,7 @@ const Routes = {
   ClassManagement: "/class-management",
   AddStudentToClass: "/add-student-to-class",
   Subject: "/subject",
+  SubjectScore: "/subject-score",
 };
 
 export default Routes;
