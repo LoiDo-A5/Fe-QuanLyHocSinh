@@ -6,6 +6,7 @@ const Routes = {
   Friendship: (id) => `/friendship/${id}`,
   ClassManagement: "/class-management",
   AddStudentToClass: "/add-student-to-class",
+  Subject: "/subject",
 };
 
 export default Routes;

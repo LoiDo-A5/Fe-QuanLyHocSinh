@@ -27,6 +27,10 @@ const API = {
     ADD_STUDENT: `${API_ROOT}/accounts/add_student_to_class/`,
     CLASS_LIST: `${API_ROOT}/accounts/class_list/`,
   },
+  SUBJECT: {
+    LIST: `${API_ROOT}/accounts/subjects/`,
+    CREATE: `${API_ROOT}/accounts/subjects/create/`,
+  },
 };
 
 export default API;
