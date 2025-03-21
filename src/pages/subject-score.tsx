@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Container, Grid, TextField, Typography, Select, MenuItem, InputLabel, FormControl, Table, TableHead, TableBody, TableRow, TableCell, TableContainer, Paper } from '@mui/material';
+import { Button, Container, Grid, TextField, Typography, Select, MenuItem, InputLabel, FormControl, Table, TableHead, TableBody, TableRow, TableCell, TableContainer, Paper, Autocomplete } from '@mui/material';
 import { axiosGet, axiosPost } from '../utils/apis/axios';
 import API from '../configs/API';
 import { ToastTopHelper } from '@/utils/utils';
 import PrivateRoute from '@/commons/PrivateRoute';
 import useStyles from "../styles/class-management/useClassManagementStyle";
+
+const validateNumber = (value: string) => {
+  const parsedValue = parseFloat(value);
+  return !isNaN(parsedValue) && parsedValue >= 0 && parsedValue <= 10;
+};
 
 const SubjectScorePage: React.FC = () => {
   const classes = useStyles();
@@ -13,7 +18,14 @@ const SubjectScorePage: React.FC = () => {
   const [semester, setSemester] = useState<number>(1); // Mặc định Học kỳ 1
   const [selectedClass, setSelectedClass] = useState<string>('');
   const [selectedSubject, setSelectedSubject] = useState<string>('');
-  const [scores, setScores] = useState<any[]>([]);
+  const [students, setStudents] = useState<any[]>([]);  // Danh sách học sinh
+  const [scores, setScores] = useState<any[]>([]);  // Danh sách điểm của học sinh
+  const [selectedStudent, setSelectedStudent] = useState<any>(null); // Chọn học sinh
+
+  const [midtermScores, setMidtermScores] = useState<number | null>(null);
+  const [finalScores, setFinalScores] = useState<number | null>(null);
+  const [finalExamScores, setFinalExamScores] = useState<number | null>(null);
+
 
   useEffect(() => {
     const fetchClasses = async () => {
@@ -26,11 +38,20 @@ const SubjectScorePage: React.FC = () => {
       if (success) setSubjects(data);
     };
 
+    const fetchStudents = async () => {
+      const { success, data } = await axiosGet(API.AUTH.LIST_USER);
+      if (success) {
+        setStudents(data.results);
+      }
+    };
+
     fetchClasses();
     fetchSubjects();
+    fetchStudents();
   }, []);
 
-  // Fetch scores when the class, subject, or semester changes
+  console.log('midtermScores', midtermScores)
+
   const handleFetchScores = async () => {
     const { success, data } = await axiosGet(API.SUBJECT.LIST, {
       params: {
@@ -42,22 +63,24 @@ const SubjectScorePage: React.FC = () => {
 
     if (success) {
       setScores(data);
+      setStudents(data.map((score: any) => score.student));  // Lấy danh sách học sinh từ dữ liệu điểm
     }
   };
 
-  // Handle submit button click
   const handleSubmit = async () => {
-    const subjectScoreData = scores.map((score) => ({
-      student: score.student.id,  // Add the student ID
-      class_name: score.class_name.id,  // Add the class ID
+    const subjectScoreData = {
+      student: selectedStudent?.id,  // Add the student ID
+      class_name: selectedClass,  // Add the class ID
       subject: selectedSubject,
       semester,
-      midterm_score: score.midterm_score,
-      final_score: score.final_score,
-      final_exam_score: score.final_exam_score,
-    }));
+      midterm_score: midtermScores,
+      final_score: finalScores,
+      final_exam_score: finalExamScores,
+    }
 
-    const { success, data } = await axiosPost(API.SUBJECT.CREATE, subjectScoreData);
+    console.log('subjectScoreData', subjectScoreData)
+
+    const { success, data } = await axiosPost(API.SUBJECT_SCORE.CREATE, subjectScoreData);
 
     if (success) {
       ToastTopHelper.success('Điểm đã được cập nhật');
@@ -84,7 +107,7 @@ const SubjectScorePage: React.FC = () => {
                 >
                   {classNames.map((className) => (
                     <MenuItem key={className.id} value={className.id}>
-                      {className.class_name}
+                      {`${className.level_name} ${className.class_name}`}
                     </MenuItem>
                   ))}
                 </Select>
@@ -124,62 +147,79 @@ const SubjectScorePage: React.FC = () => {
               </FormControl>
             </Grid>
 
-            {/* Danh sách Điểm */}
-            <Grid item xs={12}>
-              <TableContainer component={Paper}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>STT</TableCell>
-                      <TableCell>Họ và Tên</TableCell>
-                      <TableCell>Điểm 15’</TableCell>
-                      <TableCell>Điểm 1 Tiết</TableCell>
-                      <TableCell>Điểm Cuối HK</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {scores.map((score, index) => (
-                      <TableRow key={score.id}>
-                        <TableCell>{index + 1}</TableCell>
-                        <TableCell>{score.student.full_name}</TableCell>
-                        <TableCell>
-                          <TextField
-                            value={score.midterm_score || ''}
-                            onChange={(e) => {
-                              const newScores = [...scores];
-                              newScores[index].midterm_score = parseFloat(e.target.value) || '';
-                              setScores(newScores);
-                            }}
-                            type="number"
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <TextField
-                            value={score.final_score || ''}
-                            onChange={(e) => {
-                              const newScores = [...scores];
-                              newScores[index].final_score = parseFloat(e.target.value) || '';
-                              setScores(newScores);
-                            }}
-                            type="number"
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <TextField
-                            value={score.final_exam_score || ''}
-                            onChange={(e) => {
-                              const newScores = [...scores];
-                              newScores[index].final_exam_score = parseFloat(e.target.value) || '';
-                              setScores(newScores);
-                            }}
-                            type="number"
-                          />
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+            {/* Chọn Học Sinh */}
+            <Grid item xs={12} md={6}>
+              <Typography variant="h6" mb={2}>Chọn Học Sinh</Typography>
+              <Autocomplete
+                value={selectedStudent}
+                onChange={(event, newValue) => setSelectedStudent(newValue)}
+                options={students}
+                getOptionLabel={(option) => option.full_name || ''}
+                renderInput={(params) => <TextField {...params} label="Học Sinh" variant="outlined" />}
+                isOptionEqualToValue={(option, value) => option?.id === value.id}
+                disableClearable
+                fullWidth
+              />
+            </Grid>
+
+            {/* Nhập điểm 15' */}
+            <Grid item xs={12} md={6}>
+              <Typography variant="h6">Nhập Điểm 15’</Typography>
+              <TextField
+                label="Nhập Điểm 15'"
+                fullWidth
+                variant="outlined"
+                value={midtermScores}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (validateNumber(value)) {
+                    setMidtermScores(parseFloat(value));
+                  } else {
+                    ToastTopHelper.error('Điểm phải là số từ 0 đến 10');
+                  }
+                }} margin="normal"
+                type="number"
+              />
+            </Grid>
+
+            {/* Nhập điểm 1 Tiết */}
+            <Grid item xs={12} md={6}>
+              <Typography variant="h6">Nhập Điểm 1 Tiết</Typography>
+              <TextField
+                label="Nhập Điểm 1 Tiết"
+                fullWidth
+                variant="outlined"
+                value={finalScores}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (validateNumber(value)) {
+                    setFinalScores(parseFloat(value));
+                  } else {
+                    ToastTopHelper.error('Điểm phải là số từ 0 đến 10');
+                  }
+                }} margin="normal"
+                type="number"
+              />
+            </Grid>
+
+            {/* Nhập điểm Cuối HK */}
+            <Grid item xs={12} md={6}>
+              <Typography variant="h6">Nhập Điểm Cuối HK</Typography>
+              <TextField
+                label="Nhập Điểm Cuối HK"
+                fullWidth
+                variant="outlined"
+                value={finalExamScores}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (validateNumber(value)) {
+                    setFinalExamScores(parseFloat(value));
+                  } else {
+                    ToastTopHelper.error('Điểm phải là số từ 0 đến 10');
+                  }
+                }}                margin="normal"
+                type="number"
+              />
             </Grid>
 
             {/* Submit Button */}
