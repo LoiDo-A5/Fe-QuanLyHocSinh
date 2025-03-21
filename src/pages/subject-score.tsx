@@ -19,7 +19,6 @@ const SubjectScorePage: React.FC = () => {
   const [selectedClass, setSelectedClass] = useState<string>('');
   const [selectedSubject, setSelectedSubject] = useState<string>('');
   const [students, setStudents] = useState<any[]>([]);  // Danh sách học sinh
-  const [scores, setScores] = useState<any[]>([]);  // Danh sách điểm của học sinh
   const [selectedStudent, setSelectedStudent] = useState<any>(null); // Chọn học sinh
 
   const [midtermScores, setMidtermScores] = useState<number | null>(null);
@@ -50,24 +49,44 @@ const SubjectScorePage: React.FC = () => {
     fetchStudents();
   }, []);
 
-  console.log('midtermScores', midtermScores)
-
-  const handleFetchScores = async () => {
-    const { success, data } = await axiosGet(API.SUBJECT.LIST, {
-      params: {
-        class_name_id: selectedClass,
-        subject_id: selectedSubject,
-        semester,
-      },
-    });
-
-    if (success) {
-      setScores(data);
-      setStudents(data.map((score: any) => score.student));  // Lấy danh sách học sinh từ dữ liệu điểm
-    }
-  };
 
   const handleSubmit = async () => {
+    if (!selectedStudent) {
+      ToastTopHelper.error('Vui lòng chọn học sinh');
+      return;
+    }
+
+    if (!selectedClass) {
+      ToastTopHelper.error('Vui lòng chọn lớp');
+      return;
+    }
+
+    if (!selectedSubject) {
+      ToastTopHelper.error('Vui lòng chọn môn học');
+      return;
+    }
+
+    if (!semester) {
+      ToastTopHelper.error('Vui lòng chọn học kỳ');
+      return;
+    }
+
+    // Kiểm tra các điểm đã nhập
+    if (midtermScores === null || midtermScores === '' || isNaN(midtermScores)) {
+      ToastTopHelper.error('Vui lòng nhập điểm 15 phút hợp lệ');
+      return;
+    }
+
+    if (finalScores === null || finalScores === '' || isNaN(finalScores)) {
+      ToastTopHelper.error('Vui lòng nhập điểm 1 tiết hợp lệ');
+      return;
+    }
+
+    if (finalExamScores === null || finalExamScores === '' || isNaN(finalExamScores)) {
+      ToastTopHelper.error('Vui lòng nhập điểm cuối học kỳ hợp lệ');
+      return;
+    }
+
     const subjectScoreData = {
       student: selectedStudent?.id,  // Add the student ID
       class_name: selectedClass,  // Add the class ID
@@ -83,8 +102,10 @@ const SubjectScorePage: React.FC = () => {
     const { success, data } = await axiosPost(API.SUBJECT_SCORE.CREATE, subjectScoreData);
 
     if (success) {
+      setSelectedStudent(null)
+      setSelectedClass('')
+      setSelectedSubject('')
       ToastTopHelper.success('Điểm đã được cập nhật');
-      handleFetchScores(); // Cập nhật lại danh sách điểm
     }
   };
 
@@ -217,7 +238,7 @@ const SubjectScorePage: React.FC = () => {
                   } else {
                     ToastTopHelper.error('Điểm phải là số từ 0 đến 10');
                   }
-                }}                margin="normal"
+                }} margin="normal"
                 type="number"
               />
             </Grid>
