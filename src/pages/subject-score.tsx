@@ -102,12 +102,15 @@ const SubjectScorePage: React.FC = () => {
     const { success, data } = await axiosPost(API.SUBJECT_SCORE.CREATE, subjectScoreData);
 
     if (success) {
-      setSelectedStudent(null)
-      setSelectedClass('')
       setSelectedSubject('')
+      setMidtermScores('')
+      setFinalScores('')
+      setFinalExamScores('')
       ToastTopHelper.success('Điểm đã được cập nhật');
     }
   };
+
+  console.log('222222', midtermScores)
 
   return (
     <PrivateRoute>
