@@ -11,6 +11,7 @@ import usePagination from '@/hooks/usePagination';
 import moment from 'moment';
 import TabClassList from '@/commons/TabClassList';
 import ListSubjectScorePage from '@/commons/ListSubjectScorePage';
+import ListStudent from '@/commons/ListStudent';
 
 const HomePage: React.FC = () => {
     const classes = useStyles();
@@ -98,8 +99,8 @@ const HomePage: React.FC = () => {
                             handleClassChange={handleClassChange}
                         />
                     </TabPanel>
-                    <TabPanel value="2"><ListSubjectScorePage/></TabPanel>
-                    <TabPanel value="3">Item Three</TabPanel>
+                    <TabPanel value="2"><ListSubjectScorePage /></TabPanel>
+                    <TabPanel value="3"><ListStudent /></TabPanel>
                 </TabContext>
             </Box>
         </PrivateRoute>

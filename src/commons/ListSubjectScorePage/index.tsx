@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Button, Container, Grid, TextField, Typography, Select, MenuItem, InputLabel, FormControl, Table, TableHead, TableBody, TableRow, TableCell, TableContainer, Paper, Autocomplete } from '@mui/material';
 import { axiosGet } from '@/utils/apis/axios';
 import API from '@/configs/API';
-import { ToastTopHelper } from '@/utils/utils';
-import PrivateRoute from '@/commons/PrivateRoute';
 import useStyles from './style';
+import { ToastTopHelper } from '@/utils/utils';
 
 const ListSubjectScorePage: React.FC = () => {
   const classes = useStyles();
@@ -31,6 +30,23 @@ const ListSubjectScorePage: React.FC = () => {
   }, []);
 
   const handleFetchSubjectScores = async () => {
+    if (!selectedClass) {
+      ToastTopHelper.error('Vui lòng chọn lớp');
+      return;
+    }
+  
+    // Kiểm tra nếu chưa chọn môn học
+    if (!selectedSubject) {
+      ToastTopHelper.error('Vui lòng chọn môn học');
+      return;
+    }
+  
+    // Kiểm tra nếu chưa chọn học kỳ
+    if (!semester) {
+      ToastTopHelper.error('Vui lòng chọn học kỳ');
+      return;
+    }
+
     const { success, data, error } = await axiosGet(API.SUBJECT_SCORE.LIST, {
       params: {
         class_id: selectedClass,
@@ -38,15 +54,9 @@ const ListSubjectScorePage: React.FC = () => {
         semester,
       },
     });
-    console.log('error', error)
     if (success) {
       setSubjectScores(data);
     }
-  };
-
-  const handleSubmit = async () => {
-    // Logic to save/update subject scores if needed
-    ToastTopHelper.success('Điểm đã được cập nhật');
   };
 
   return (
