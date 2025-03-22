@@ -18,7 +18,7 @@ const ListStudent: React.FC = () => {
         page_size: 10,
       }
     });
-
+    console.log('data', data)
     if (success) {
       setStudents(data);
     }
@@ -55,8 +55,8 @@ const ListStudent: React.FC = () => {
                 <TableCell>{(page - 1) * 10 + index + 1}</TableCell>
                 <TableCell>{student.full_name}</TableCell>
                 <TableCell>{student.class_name}</TableCell>
-                <TableCell>{student.semester_1_avg ?? 'Chưa có điểm'}</TableCell>
-                <TableCell>{student.semester_2_avg ?? 'Chưa có điểm'}</TableCell>
+                <TableCell>{student?.student_score?.semester_1_avg ?? 'Chưa có điểm'}</TableCell>
+                <TableCell>{student?.student_score?.semester_2_avg ?? 'Chưa có điểm'}</TableCell>
               </TableRow>
             ))}
           </TableBody>

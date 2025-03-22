@@ -82,8 +82,8 @@ const HomePage: React.FC = () => {
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <TabList onChange={handleChange} aria-label="lab API tabs example">
                             <Tab label="Danh sách lớp" value="1" />
-                            <Tab label="Bảng Điểm Môn Học" value="2" />
-                            <Tab label="Item Three" value="3" />
+                            <Tab label="Danh Sách Học Sinh" value="2" />
+                            <Tab label="Bảng Điểm Môn Học" value="3" />
                         </TabList>
                     </Box>
                     <TabPanel value="1">
@@ -99,8 +99,8 @@ const HomePage: React.FC = () => {
                             handleClassChange={handleClassChange}
                         />
                     </TabPanel>
-                    <TabPanel value="2"><ListSubjectScorePage /></TabPanel>
-                    <TabPanel value="3"><ListStudent /></TabPanel>
+                    <TabPanel value="2"><ListStudent /></TabPanel>
+                    <TabPanel value="3"><ListSubjectScorePage /></TabPanel>
                 </TabContext>
             </Box>
         </PrivateRoute>
