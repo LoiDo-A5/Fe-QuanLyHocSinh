@@ -33,6 +33,7 @@ const API = {
   },
   SUBJECT_SCORE: {
     CREATE: `${API_ROOT}/accounts/subject_score/create_update/`,
+    LIST: `${API_ROOT}/accounts/subject_score/`,
   },
 };
 

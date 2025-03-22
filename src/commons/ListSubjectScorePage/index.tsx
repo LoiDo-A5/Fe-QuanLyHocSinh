@@ -30,16 +30,15 @@ const ListSubjectScorePage: React.FC = () => {
     fetchSubjects();
   }, []);
 
-  // Fetch the subject scores when the class, subject, or semester changes
   const handleFetchSubjectScores = async () => {
-    const { success, data } = await axiosGet(API.SUBJECT_SCORE.LIST, {
+    const { success, data, error } = await axiosGet(API.SUBJECT_SCORE.LIST, {
       params: {
         class_id: selectedClass,
         subject_id: selectedSubject,
         semester,
       },
     });
-
+    console.log('error', error)
     if (success) {
       setSubjectScores(data);
     }
