@@ -7,10 +7,10 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { axiosGet } from '@/utils/apis/axios';
 import API from '@/configs/API';
-import PaginationCustom from '@/commons/PaginationCustom';
 import usePagination from '@/hooks/usePagination';
 import moment from 'moment';
 import TabClassList from '@/commons/TabClassList';
+import ListSubjectScorePage from '@/commons/ListSubjectScorePage';
 
 const HomePage: React.FC = () => {
     const classes = useStyles();
@@ -98,7 +98,7 @@ const HomePage: React.FC = () => {
                             handleClassChange={handleClassChange}
                         />
                     </TabPanel>
-                    <TabPanel value="2">Item Two</TabPanel>
+                    <TabPanel value="2"><ListSubjectScorePage/></TabPanel>
                     <TabPanel value="3">Item Three</TabPanel>
                 </TabContext>
             </Box>
