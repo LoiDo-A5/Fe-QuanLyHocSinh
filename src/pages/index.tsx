@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import useStyles from '../styles/list-room/useListRoomStyle';
 import PrivateRoute from '@/commons/PrivateRoute';
-import { Container, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import { Box, Tab } from '@mui/material';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
 import { axiosGet } from '@/utils/apis/axios';
 import API from '@/configs/API';
 import PaginationCustom from '@/commons/PaginationCustom';
 import usePagination from '@/hooks/usePagination';
 import moment from 'moment';
+import TabClassList from '@/commons/TabClassList';
 
 const HomePage: React.FC = () => {
     const classes = useStyles();
@@ -18,7 +22,6 @@ const HomePage: React.FC = () => {
 
     const getClassList = async () => {
         const { success, data } = await axiosGet(API.CLASS.NAMES);
-
         if (success) {
             setClassesList(data);
         }
@@ -40,10 +43,9 @@ const HomePage: React.FC = () => {
         }
     };
 
-
-    const handleClassChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    const handleClassChange = (event: React.ChangeEvent<{ value: unknown }>, page: number) => {
         setSelectedClass(event.target.value as string);
-        onPageChange(1);
+        onPageChange(page);
     };
 
     const handlePageChange = (_, newPage: number) => {
@@ -51,6 +53,13 @@ const HomePage: React.FC = () => {
     };
 
     const listStudents = students?.results?.students || [];
+
+    // Manage the selected tab state
+    const [value, setValue] = useState('1');
+
+    const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
+        setValue(newValue);
+    };
 
     useEffect(() => {
         getClassList();
@@ -62,65 +71,39 @@ const HomePage: React.FC = () => {
 
     return (
         <PrivateRoute>
-            <Container className={classes.background}>
-                <Box mt={4} mb={2}>
-                    <div className={classes.titleRoom}>DANH SÁCH LỚP</div>
-                </Box>
+            <Box sx={{
+                height: "90vh",
+                width: "100%", marginTop: 10,
+                paddingRight: 20, paddingLeft: 20
 
-                <FormControl fullWidth sx={{ marginBottom: 4 }}>
-                    <InputLabel id="class-select-label">Chọn lớp</InputLabel>
-                    <Select
-                        labelId="class-select-label"
-                        id="class-select"
-                        value={selectedClass}
-                        onChange={handleClassChange}
-                        label="Chọn lớp"
-                    >
-                        {classesList.map((classItem) => (
-                            <MenuItem key={classItem.id} value={classItem.id}>
-                                {`${classItem.level_name}${classItem.class_name}`}  - Sĩ số: {classItem.number_of_students}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-
-                <TableContainer component={Paper} sx={{ marginTop: 4 }}>
-                     <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>ID</TableCell>
-                                <TableCell>Họ và tên</TableCell>
-                                <TableCell>Giới tính</TableCell>
-                                <TableCell>Ngày sinh</TableCell>
-                                <TableCell>Địa chỉ</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {listStudents.map((student, index) => (
-                                <TableRow key={index}>
-                                    <TableCell>{index + 1}</TableCell>
-                                    <TableCell>{student.full_name}</TableCell>
-                                    <TableCell>{student.gender === 0 ? 'Nam' : 'Nữ'}</TableCell>
-                                    <TableCell>{moment(student.birthday).format('DD/MM/YYYY')}</TableCell>
-                                    <TableCell>{student.address}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-
-                {!!totalPage && (
-                    <PaginationCustom
-                        paginationStyle={classes.pagination}
-                        count={totalPage}
-                        page={page}
-                        onChange={handlePageChange}
-                    />
-                )}
-            </Container>
+            }}>
+                <TabContext value={value}>
+                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                        <TabList onChange={handleChange} aria-label="lab API tabs example">
+                            <Tab label="Danh sách lớp" value="1" />
+                            <Tab label="Item Two" value="2" />
+                            <Tab label="Item Three" value="3" />
+                        </TabList>
+                    </Box>
+                    <TabPanel value="1">
+                        <TabClassList
+                            selectedClass={selectedClass}
+                            setSelectedClass={setSelectedClass}
+                            classesList={classesList}
+                            listStudents={listStudents}
+                            totalPage={totalPage}
+                            page={page}
+                            onPageChange={onPageChange}
+                            handlePageChange={handlePageChange}
+                            handleClassChange={handleClassChange}
+                        />
+                    </TabPanel>
+                    <TabPanel value="2">Item Two</TabPanel>
+                    <TabPanel value="3">Item Three</TabPanel>
+                </TabContext>
+            </Box>
         </PrivateRoute>
     );
 };
-
 
 export default HomePage;
