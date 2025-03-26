@@ -1,11 +1,15 @@
 export interface User {
-    name: string;
-    email: string;
-    avatar: string;
-    phone_number: string;
-    username: string;
-    id: string;
-  }
+  id: string;
+  full_name: string;
+  gender: number; 
+  birthday: string; 
+  address: string;
+  email: string;
+  avatar: string;
+  phone_number: string;
+  username: string;
+}
+
   
   export interface Account {
     token: string;

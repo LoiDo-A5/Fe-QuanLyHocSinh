@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
     overflowY: "auto",
   },
   titleRoom: {
-    marginTop: 100,
     fontSize: 32,
     fontWeight: "bold",
   },

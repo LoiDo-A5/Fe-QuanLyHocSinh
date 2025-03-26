@@ -1,50 +1,108 @@
 import React, { useEffect, useState } from 'react';
 import useStyles from '../styles/list-room/useListRoomStyle';
 import PrivateRoute from '@/commons/PrivateRoute';
+import { Box, Tab } from '@mui/material';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
 import { axiosGet } from '@/utils/apis/axios';
 import API from '@/configs/API';
-import { List, ListItem, ListItemText, ListItemAvatar, Avatar, Container, Box, ListItemSecondaryAction } from '@mui/material';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import ChatIcon from '@mui/icons-material/Chat';
-import { useRouter } from 'next/router';
-
-interface Room {
-    id: number;
-    name: string;
-}
+import usePagination from '@/hooks/usePagination';
+import moment from 'moment';
+import TabClassList from '@/commons/TabClassList';
+import ListSubjectScorePage from '@/commons/ListSubjectScorePage';
+import ListStudent from '@/commons/ListStudent';
 
 const HomePage: React.FC = () => {
     const classes = useStyles();
-    const [rooms, setRooms] = useState<Room[]>([]);
+    const [classesList, setClassesList] = useState<any[]>([]);
+    const [selectedClass, setSelectedClass] = useState<string>('');
+    const [students, setStudents] = useState<any>([]);
 
-    const router = useRouter();
+    const { page, totalPage, onPageChange } = usePagination(students?.count || 0, students?.page_size || 10);
 
-    const goToRoom = (roomId: number) => {
-        router.push(`/room/${roomId}`);
+    const getClassList = async () => {
+        const { success, data } = await axiosGet(API.CLASS.NAMES);
+        if (success) {
+            setClassesList(data);
+        }
     };
 
-    const getListRoom = async () => {
-        const { success, data } = await axiosGet(API.ROOM.LIST_ROOM);
-        if (success) {
-            setRooms(data)
-        }
-    }
+    const getStudentsInClass = async () => {
+        if (!selectedClass) return;
 
+        const { success, data } = await axiosGet(`${API.CLASS.CLASS_LIST}`, {
+            params: {
+                class_id: selectedClass,
+                page,
+                page_size: 10
+            }
+        });
+
+        if (success) {
+            setStudents(data);
+        }
+    };
+
+    const handleClassChange = (event: React.ChangeEvent<{ value: unknown }>, page: number) => {
+        setSelectedClass(event.target.value as string);
+        onPageChange(page);
+    };
+
+    const handlePageChange = (_, newPage: number) => {
+        onPageChange(newPage);
+    };
+
+    const listStudents = students?.results?.students || [];
+
+    // Manage the selected tab state
+    const [value, setValue] = useState('1');
+
+    const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
+        setValue(newValue);
+    };
 
     useEffect(() => {
-        getListRoom()
+        getClassList();
     }, []);
+
+    useEffect(() => {
+        getStudentsInClass();
+    }, [selectedClass, page]);
 
     return (
         <PrivateRoute>
-            <Container className={classes.background}>
+            <Box sx={{
+                height: "90vh",
+                width: "100%", marginTop: 10,
+                paddingRight: 20, paddingLeft: 20
 
-                <Box mt={4}>
-                    <div className={classes.titleRoom}>
-                        QUAN LY HOC SINH
-                    </div>
-                </Box>
-            </Container>
+            }}>
+                <TabContext value={value}>
+                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                        <TabList onChange={handleChange} aria-label="lab API tabs example">
+                            <Tab label="Danh sách lớp" value="1" />
+                            <Tab label="Danh Sách Học Sinh" value="2" />
+                            <Tab label="Bảng Điểm Môn Học" value="3" />
+                        </TabList>
+                    </Box>
+                    <TabPanel value="1">
+                        <TabClassList
+                            selectedClass={selectedClass}
+                            setSelectedClass={setSelectedClass}
+                            classesList={classesList}
+                            listStudents={listStudents}
+                            totalPage={totalPage}
+                            page={page}
+                            onPageChange={onPageChange}
+                            handlePageChange={handlePageChange}
+                            handleClassChange={handleClassChange}
+                        />
+                    </TabPanel>
+                    <TabPanel value="2"><ListStudent /></TabPanel>
+                    <TabPanel value="3"><ListSubjectScorePage /></TabPanel>
+                </TabContext>
+            </Box>
         </PrivateRoute>
     );
 };

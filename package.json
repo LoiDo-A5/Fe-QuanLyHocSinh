@@ -7,13 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "export":"next export",
+    "export": "next export",
     "build:prod": "NODE_ENV=production next build"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.18",
+    "@mui/lab": "^6.0.0-beta.31",
     "@mui/material": "^5.14.18",
     "@mui/styles": "^5.14.18",
     "@reduxjs/toolkit": "^1.9.7",
@@ -35,6 +36,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/reactjs-localstorage": "^1.0.2",
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
     "autoprefixer": "^10.0.1",

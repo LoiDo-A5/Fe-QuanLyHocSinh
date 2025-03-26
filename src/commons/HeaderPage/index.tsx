@@ -41,9 +41,30 @@ const HeaderPage: React.FC = () => {
     router.push(Routes.MyAccount);
   };
 
+  const handleClickSinUp = () => {
+    router.push(Routes.Signup);
+  }
+
   const goHome = () => {
     router.push(Routes.Home);
   }
+
+  const handleClickClassManage = () => {
+    router.push(Routes.ClassManagement);
+  };
+
+  const handleClickAddStudentToClass = () => {
+    router.push(Routes.AddStudentToClass);
+  }
+
+  const handleClickSubject = () => {
+    router.push(Routes.Subject);
+  }
+
+  const handleClickSubjectScore = () => {
+    router.push(Routes.SubjectScore);
+  }
+
 
   useEffect(() => {
     setIsClient(true);
@@ -117,15 +138,43 @@ const HeaderPage: React.FC = () => {
               </div>
 
               <Divider />
-              <MenuItem onClick={handleClickMyAccount}>{'My account'}</MenuItem>
+              <MenuItem className={classes.menuItemHelp} onClick={handleClickMyAccount}>{'Tài khoản của tôi'}</MenuItem>
               <MenuItem
-                onClick={handleClose}
+                onClick={handleClickSinUp}
                 className={classes.menuItemHelp}
               >
-                {'Help'}
+                {'Tạo tài khoản cho học sinh'}
+              </MenuItem>
+              <MenuItem
+                onClick={handleClickClassManage}
+                className={classes.menuItemHelp}
+              >
+                {'Tạo khối lớp và lớp học'}
+              </MenuItem>
+
+              <MenuItem
+                onClick={handleClickAddStudentToClass}
+                className={classes.menuItemHelp}
+              >
+                {'Thêm học sinh vào lớp học'}
+              </MenuItem>
+
+              <MenuItem
+                onClick={handleClickSubject}
+                className={classes.menuItemHelp}
+              >
+                {'Quản lý môn học'}
+              </MenuItem>
+
+
+              <MenuItem
+                onClick={handleClickSubjectScore}
+                className={classes.menuItemHelp}
+              >
+                {'Nhập điểm môn học cho học sinh'}
               </MenuItem>
               <Divider />
-              <MenuItem onClick={handleLogOut}>{'Sign out'}</MenuItem>
+              <MenuItem onClick={handleLogOut}>{'Đăng xuất'}</MenuItem>
             </Menu>
           </div>
         </Toolbar>

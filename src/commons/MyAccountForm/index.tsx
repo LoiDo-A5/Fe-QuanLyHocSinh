@@ -11,7 +11,7 @@ import { ToastTopHelper } from '@/utils/utils';
 
 interface UserProfile {
   avatar: string;
-  name?: string;
+  full_name?: string;
   email?: string;
   phone_number?: string;
   avatarUploadFile?: any
@@ -39,9 +39,9 @@ const MyAccountForm: FC<MyAccountFormProps> = ({ defaultUserData, userProfile, s
   const inputItem: InputItem[] = [
     {
       label: 'Name',
-      value: userProfile?.name,
+      value: userProfile?.full_name,
       onChange: (e) =>
-        setUserProfile((prevProfile) => ({ ...prevProfile, name: e.target.value })),
+        setUserProfile((prevProfile) => ({ ...prevProfile, full_name: e.target.value })),
     },
     {
       label: 'Email',
@@ -63,7 +63,7 @@ const MyAccountForm: FC<MyAccountFormProps> = ({ defaultUserData, userProfile, s
         userProfile?.avatarUploadFile
       );
     }
-    formData.append('name', userProfile?.name || '');
+    formData.append('full_name', userProfile?.full_name || '');
     const { success, data } = await axiosPatch(API.AUTH.ACCOUNT_INFO, formData);
 
     if (success) {
