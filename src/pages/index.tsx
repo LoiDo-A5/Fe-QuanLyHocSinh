@@ -12,6 +12,7 @@ import moment from 'moment';
 import TabClassList from '@/commons/TabClassList';
 import ListSubjectScorePage from '@/commons/ListSubjectScorePage';
 import ListStudent from '@/commons/ListStudent';
+import SubjectReport from '@/commons/SubjectReport';
 
 const HomePage: React.FC = () => {
     const classes = useStyles();
@@ -84,6 +85,7 @@ const HomePage: React.FC = () => {
                             <Tab label="Danh sách lớp" value="1" />
                             <Tab label="Danh Sách Học Sinh" value="2" />
                             <Tab label="Bảng Điểm Môn Học" value="3" />
+                            <Tab label="Báo Cáo Tổng Kết Học Kỳ" value="4" />
                         </TabList>
                     </Box>
                     <TabPanel value="1">
@@ -101,6 +103,7 @@ const HomePage: React.FC = () => {
                     </TabPanel>
                     <TabPanel value="2"><ListStudent /></TabPanel>
                     <TabPanel value="3"><ListSubjectScorePage /></TabPanel>
+                    <TabPanel value="4"><SubjectReport /></TabPanel>
                 </TabContext>
             </Box>
         </PrivateRoute>

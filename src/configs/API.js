@@ -36,6 +36,9 @@ const API = {
     CREATE: `${API_ROOT}/accounts/subject_score/create_update/`,
     LIST: `${API_ROOT}/accounts/subject_score/`,
   },
+  SUBJECT_REPORT: {
+    LIST: `${API_ROOT}/accounts/subject_report/`,
+  },
 };
 
 export default API;
