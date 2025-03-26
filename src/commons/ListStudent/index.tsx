@@ -15,7 +15,6 @@ const ListStudent: React.FC = () => {
 
   const { page, totalPage, onPageChange } = usePagination(students.count, students.page_size);
 
-  console.log('selectedClassName', selectedClassName)
 
   const handleFetchStudents = async () => {
     const { success, data } = await axiosGet(API.AUTH.LIST_STUDENT, {

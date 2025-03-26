@@ -110,8 +110,6 @@ const SubjectScorePage: React.FC = () => {
     }
   };
 
-  console.log('222222', midtermScores)
-
   return (
     <PrivateRoute>
       <div className={classes.wrapContainer}>

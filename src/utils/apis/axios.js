@@ -87,7 +87,6 @@ async function refreshToken() {
       },
     }
   );
-  console.log("77777688", response);
 
   return response.data;
 }
