@@ -3,6 +3,7 @@ import { Button, Container, Grid, FormControl, InputLabel, Select, MenuItem, Typ
 import { axiosGet } from '@/utils/apis/axios';
 import API from '@/configs/API';
 import useStyles from './style';
+import { ToastTopHelper } from '@/utils/utils';
 
 const SubjectReport: React.FC = () => {
   const classes = useStyles();
@@ -24,8 +25,10 @@ const SubjectReport: React.FC = () => {
   }, []);
 
   const handleFetchSubjectReport = async () => {
-    if (!selectedSubject) return;
-
+    if (!selectedSubject || !semester) {
+      ToastTopHelper.error('Vui lòng chọn môn và học kỳ');
+      return;
+    }
     const { success, data } = await axiosGet(API.SUBJECT_REPORT.LIST, {
       params: {
         subject_id: selectedSubject,

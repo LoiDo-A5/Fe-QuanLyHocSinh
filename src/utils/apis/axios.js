@@ -105,8 +105,9 @@ async function axiosCall(method, ...args) {
     if (
       error.response &&
       error.response.status === 401 &&
-      Array.isArray(error.response.data.messages) &&
-      error.response.data.messages[0]?.message === "Token is expired"
+      ((Array.isArray(error.response.data.messages) &&
+        error.response.data.messages[0]?.message === "Token is expired") ||
+        error.response.data.detail === "Token is expired")
     ) {
       try {
         const { access, refresh } = await refreshToken();
