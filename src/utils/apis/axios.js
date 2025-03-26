@@ -87,6 +87,7 @@ async function refreshToken() {
       },
     }
   );
+  console.log("77777688", response);
 
   return response.data;
 }
@@ -105,6 +106,7 @@ async function axiosCall(method, ...args) {
     if (
       error.response &&
       error.response.status === 401 &&
+      Array.isArray(error.response.data.messages) &&
       error.response.data.messages[0]?.message === "Token is expired"
     ) {
       try {
