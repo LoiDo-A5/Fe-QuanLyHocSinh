@@ -102,7 +102,11 @@ async function axiosCall(method, ...args) {
   try {
     response = await axios[method](...args);
   } catch (error) {
-    if (error.response && error.response.status === 401) {
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      error.response.data.messages[0]?.message === "Token is expired"
+    ) {
       try {
         const { access, refresh } = await refreshToken();
         reactLocalStorage.set("accessToken", access);
@@ -110,7 +114,7 @@ async function axiosCall(method, ...args) {
         axios.defaults.headers["Authorization"] = `Bearer ${access}`;
         response = await axios[method](...args);
       } catch (refreshError) {
-        reactLocalStorage.clear()
+        reactLocalStorage.clear();
         ToastTopHelper.error("Your session has expired. Please log in again.");
         window.location.href = "/login";
       }
@@ -122,7 +126,12 @@ async function axiosCall(method, ...args) {
     }
   }
 
+  if (!response || !response.data) {
+    return { success: false, error: "No data received from the server" };
+  }
+
   const { data } = response;
+
   return {
     success: true,
     data,

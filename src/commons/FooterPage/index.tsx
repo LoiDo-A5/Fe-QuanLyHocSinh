@@ -11,16 +11,17 @@ const FooterPage: React.FC = () => {
         <Grid container spacing={3} justifyContent="space-between">
           <Grid item xs={12} md={4}>
             <Typography variant="h6" className={classes.title}>
-              About Us
+              Giới Thiệu
             </Typography>
             <Typography variant="body2">
-              Discover Our Story: Connecting People, One Room at a Time.
+              Một nền tảng quản lý học sinh hiện đại và dễ sử dụng, giúp
+              giáo viên dễ dàng theo dõi và quản lý thông tin học sinh, điểm số, và các hoạt động học tập.
             </Typography>
           </Grid>
 
           <Grid item xs={12} md={4}>
             <Typography variant="h6" className={classes.title}>
-              Contact Us
+              Liên hệ với chúng tôi
             </Typography>
             <Typography variant="body2">
               Email: doloicodechill@gmail.com
@@ -32,10 +33,10 @@ const FooterPage: React.FC = () => {
 
           <Grid item xs={12} md={4}>
             <Typography variant="h6" className={classes.title}>
-              Follow Us
+              Cập Nhật Tin Tức Cùng Chúng Tôi
             </Typography>
             <Typography variant="body2">
-              Connect with us on social media for the latest updates and promotions.
+              Theo Dõi Chúng Tôi Để Cập Nhật Tin Tức Mới Nhất Về Phần Mềm Quản Lý Học Sinh
             </Typography>
             {/* Add social media icons or links here */}
           </Grid>
@@ -43,7 +44,7 @@ const FooterPage: React.FC = () => {
 
         <div className={classes.bottomText}>
           <Typography variant="body2" color="textSecondary" align="center">
-            &copy; 2024 ChatRoom. All rights reserved.
+            &copy; 2025 Manage Student. All rights reserved.
           </Typography>
         </div>
       </Container>

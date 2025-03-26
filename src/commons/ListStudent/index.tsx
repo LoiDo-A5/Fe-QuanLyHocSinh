@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, TextField } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, TextField, Grid, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { axiosGet } from '@/utils/apis/axios';
 import API from '@/configs/API';
 import PaginationCustom from '@/commons/PaginationCustom';
@@ -10,7 +10,12 @@ const ListStudent: React.FC = () => {
   const classes = useStyles();
   const [students, setStudents] = useState<any>({ results: [], count: 0, page_size: 10 });
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedClassName, setSelectedClassName] = useState<string>('');
+  const [classNames, setClassNames] = useState<any[]>([]);
+
   const { page, totalPage, onPageChange } = usePagination(students.count, students.page_size);
+
+  console.log('selectedClassName', selectedClassName)
 
   const handleFetchStudents = async () => {
     const { success, data } = await axiosGet(API.AUTH.LIST_STUDENT, {
@@ -18,6 +23,7 @@ const ListStudent: React.FC = () => {
         page,
         page_size: 10,
         search: searchQuery,  // Send the search query in the request
+        class_name_id: selectedClassName
       }
     });
 
@@ -36,7 +42,20 @@ const ListStudent: React.FC = () => {
 
   useEffect(() => {
     handleFetchStudents();
-  }, [page, searchQuery]);  // Re-fetch when the page or search query changes
+  }, [page, searchQuery, selectedClassName]);  // Re-fetch when the page or search query changes
+
+  useEffect(() => {
+
+    const fetchClassNames = async () => {
+      const { success, data } = await axiosGet(API.CLASS.NAMES);
+      if (success) {
+        setClassNames(data);
+      }
+    };
+
+
+    fetchClassNames();
+  }, []);
 
   return (
     <div>
@@ -45,14 +64,43 @@ const ListStudent: React.FC = () => {
       </Typography>
 
       {/* Search Field */}
-      <TextField
-        label="Tìm kiếm theo Họ và Tên"
-        variant="outlined"
-        fullWidth
-        value={searchQuery}
-        onChange={handleSearchChange}
-        style={{ marginBottom: '20px' }}
-      />
+      <Grid container spacing={4} >
+        <Grid item xs={6} md={6} mt={2}>
+          <TextField
+            label="Tìm kiếm theo Họ và Tên"
+            variant="outlined"
+            fullWidth
+            value={searchQuery}
+            onChange={handleSearchChange} />
+        </Grid>
+
+        <Grid item xs={6} md={6} >
+          <FormControl fullWidth variant="outlined" margin="normal">
+            <InputLabel>Chọn Lớp</InputLabel>
+            <Select
+              value={selectedClassName}
+              onChange={(e) => setSelectedClassName(e.target.value)}
+              label="Chọn Lớp"
+            >
+              {/* Clear option */}
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+
+              {classNames.map((className) => {
+                const levelName = className.level_name;
+                const classNameLabel = `${levelName}${className.class_name}`;
+
+                return (
+                  <MenuItem key={className.id} value={className.id}>
+                    {classNameLabel}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
 
       <TableContainer component={Paper}>
         <Table>
