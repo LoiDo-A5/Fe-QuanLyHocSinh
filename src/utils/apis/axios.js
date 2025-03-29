@@ -87,8 +87,6 @@ async function refreshToken() {
       },
     }
   );
-  console.log("1111111111111", response.data);
-
   return response.data;
 }
 
@@ -108,7 +106,6 @@ async function axiosCall(method, ...args) {
         const { access, refresh } = await refreshToken();
         reactLocalStorage.set("accessToken", access);
         reactLocalStorage.set("refreshToken", refresh);
-        console.log("22222222222222222222");
         axios.defaults.headers["Authorization"] = `Bearer ${access}`;
         response = await axios[method](...args);
       } catch (refreshError) {

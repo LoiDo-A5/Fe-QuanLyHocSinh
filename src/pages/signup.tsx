@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 import Routes from "../utils/Route";
 import { ToastTopHelper } from "@/utils/utils";
 import useStyles from "../styles/sign-up/useSignUpStyle";
-import PrivateRoute from "@/commons/PrivateRoute";
 
 interface SignupFormProps { }
 
@@ -17,26 +16,29 @@ const SignupForm: React.FC<SignupFormProps> = () => {
   const router = useRouter();
 
   const [fullName, setFullName] = useState<string>("");
-  const [gender, setGender] = useState<any>('man');
+  const [gender, setGender] = useState<any>(0);
   const [birthDate, setBirthDate] = useState<any>("");
   const [address, setAddress] = useState<string>("");
+
   const [email, setEmail] = useState<string>("");
-  const [birthDateError, setBirthDateError] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
 
   const validateForm = () => {
-    if (!fullName || !email || !gender || !birthDate || !address) {
+    if (!fullName || !email || !password || !confirmPassword || !gender || !birthDate || !address) {
       ToastTopHelper.error("Tất cả các trường đều là bắt buộc");
       return false;
     }
+
 
     if (fullName.length > 60) {
       ToastTopHelper.error("Họ và tên không được vượt quá 60 ký tự");
       return false;
     }
 
-    const fullNamePattern = /^[A-Z][a-z]+(\s[A-Z][a-z]?){0,}/;
+    const fullNamePattern = /^[A-Za-zÀ-ÿ\s]+$/;
     if (!fullNamePattern.test(fullName)) {
-      ToastTopHelper.error("Họ và tên không được chứa số hoặc ký tự không hợp lệ");
+      ToastTopHelper.error("Họ và tên không được chứa số");
       return false;
     }
 
@@ -50,29 +52,22 @@ const SignupForm: React.FC<SignupFormProps> = () => {
       return false;
     }
 
-    if (birthDateError) {
-      ToastTopHelper.error(birthDateError);
+    if (password !== confirmPassword) {
+      ToastTopHelper.error("Mật khẩu và Xác nhận mật khẩu không khớp");
+      return false;
+    }
+
+    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{6,}$/;
+    if (!passwordPattern.test(password)) {
+      ToastTopHelper.error("Mật khẩu phải có ít nhất 6 ký tự, bao gồm chữ cái, số, 1 chữ cái viết hoa và 1 ký tự đặc biệt");
       return false;
     }
 
     return true;
   };
 
-  const handleBirthDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const birthDateValue = event.target.value;
-    setBirthDate(birthDateValue);
 
-    const today = new Date();
-    const birthDateObj = new Date(birthDateValue);
-    const age = today.getFullYear() - birthDateObj.getFullYear();
-    const month = today.getMonth() - birthDateObj.getMonth();
-
-    if (age < 15 || age > 20 || (age === 15 && month < 0) || (age === 20 && month > 0)) {
-      setBirthDateError("Tuổi phải từ 15 đến 20.");
-    } else {
-      setBirthDateError("");
-    }
-  };
+  console.log('gender', gender)
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -84,85 +79,109 @@ const SignupForm: React.FC<SignupFormProps> = () => {
     const { success, data } = await axiosPost(API.AUTH.SIGNUP, {
       full_name: fullName,
       email,
-      gender: gender === 'man' ? 0 : 1,
+      password1: password,
+      password2: confirmPassword,
+      gender,
       birthday: birthDate,
       address,
     });
 
     if (success) {
-      ToastTopHelper.success("Tạo tài khoản thành công!");
       router.push(Routes.Home);
     }
   };
 
-  return (
-    <PrivateRoute>
-      <div className={classes.background}>
-        <form className={classes.form} onSubmit={handleSubmit}>
-          <Typography className={classes.title}>ĐĂNG KÝ</Typography>
+  const handleNavigateSignUp = () => {
+    router.push(Routes.Login);
+  };
 
-          <TextField
-            label="Họ và Tên"
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-          />
-          <FormControl fullWidth margin="normal">
-            <InputLabel>Giới tính</InputLabel>
-            <Select
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
-              label="Giới tính"
-            >
-              <MenuItem value={'man'}>Nam giới</MenuItem>
-              <MenuItem value={'female'}>Nữ giới</MenuItem>
-            </Select>
-          </FormControl>
-          <TextField
-            label="Ngày sinh"
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            type="date"
-            value={birthDate}
-            onChange={handleBirthDateChange}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            error={!!birthDateError} // Thêm error khi có lỗi
-            helperText={birthDateError} // Hiển thị lỗi
-          />
-          <TextField
-            label="Địa chỉ"
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-          />
-          <TextField
-            label="Email"
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            className={classes.submitButton}
+  return (
+    <div className={classes.background}>
+      <form className={classes.form} onSubmit={handleSubmit}>
+        <Typography className={classes.title}>ĐĂNG KÝ</Typography>
+
+        <TextField
+          label="Họ và Tên"
+          fullWidth
+          variant="outlined"
+          margin="normal"
+          value={fullName}
+          onChange={(e) => setFullName(e.target.value)}
+        />
+        <FormControl fullWidth margin="normal">
+          <InputLabel>Giới tính</InputLabel>
+          <Select
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+            label="Giới tính"
           >
-            Đăng ký
-          </Button>
-        </form>
-      </div>
-    </PrivateRoute>
+            <MenuItem value={0}>Nam giới</MenuItem>
+            <MenuItem value={1}>Nữ giới</MenuItem>
+          </Select>
+        </FormControl>
+        <TextField
+          label="Ngày sinh"
+          fullWidth
+          variant="outlined"
+          margin="normal"
+          type="date"
+          value={birthDate}
+          onChange={(e) => setBirthDate(e.target.value)}
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+        <TextField
+          label="Địa chỉ"
+          fullWidth
+          variant="outlined"
+          margin="normal"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+        />
+        <TextField
+          label="Email"
+          fullWidth
+          variant="outlined"
+          margin="normal"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <TextField
+          label="Mật khẩu"
+          fullWidth
+          variant="outlined"
+          margin="normal"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <TextField
+          label="Xác nhận mật khẩu"
+          fullWidth
+          variant="outlined"
+          margin="normal"
+          type="password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+        />
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          fullWidth
+          className={classes.submitButton}
+        >
+          Đăng ký
+        </Button>
+        <div onClick={handleNavigateSignUp} className={classes.signupLink}>
+          <Link variant="body2">
+            Đã có tài khoản? Đăng nhập
+          </Link>
+        </div>
+      </form>
+    </div>
   );
 };
 
