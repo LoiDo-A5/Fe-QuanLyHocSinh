@@ -39,6 +39,9 @@ const API = {
   SUBJECT_REPORT: {
     LIST: `${API_ROOT}/accounts/subject_report/`,
   },
+  SEMESTER_REPORT: {
+    LIST: `${API_ROOT}/accounts/semester_report/`,
+  },
 };
 
 export default API;

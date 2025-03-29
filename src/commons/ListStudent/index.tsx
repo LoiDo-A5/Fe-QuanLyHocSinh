@@ -118,8 +118,8 @@ const ListStudent: React.FC = () => {
                 <TableCell>{(page - 1) * 10 + index + 1}</TableCell>
                 <TableCell>{student.full_name}</TableCell>
                 <TableCell>{student.class_name}</TableCell>
-                <TableCell>{student?.student_score?.semester_1_avg ?? 'Chưa có điểm'}</TableCell>
-                <TableCell>{student?.student_score?.semester_2_avg ?? 'Chưa có điểm'}</TableCell>
+                <TableCell>{(student?.student_score?.semester_1_avg)?.toFixed(1) ?? 'Chưa có điểm'}</TableCell>
+                <TableCell>{(student?.student_score?.semester_2_avg)?.toFixed(1) ?? 'Chưa có điểm'}</TableCell>
               </TableRow>
             ))}
           </TableBody>
