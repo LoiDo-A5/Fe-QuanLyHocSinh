@@ -14,6 +14,7 @@ import ListSubjectScorePage from '@/commons/ListSubjectScorePage';
 import ListStudent from '@/commons/ListStudent';
 import SubjectReport from '@/commons/SubjectReport';
 import SemesterReport from '@/commons/SemesterReport';
+import backgroundImage from "../images/background2.jpg";
 
 const HomePage: React.FC = () => {
     const classes = useStyles();
@@ -76,9 +77,12 @@ const HomePage: React.FC = () => {
         <PrivateRoute>
             <Box sx={{
                 height: "90vh",
-                width: "100%", marginTop: 10,
-                paddingRight: 20, paddingLeft: 20
-
+                width: "100%", marginTop: 8,
+                paddingRight: 20, paddingLeft: 20,
+                backgroundImage: `url(${backgroundImage.src})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
             }}>
                 <TabContext value={value}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
