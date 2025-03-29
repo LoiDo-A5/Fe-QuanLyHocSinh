@@ -18,6 +18,8 @@ const HeaderPage: React.FC = () => {
   const router = useRouter();
   const user = useSelector((state: RootState) => state.auth.account.user);
 
+  console.log('user', user.role)
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isClient, setIsClient] = useState(false);
 
@@ -125,7 +127,7 @@ const HeaderPage: React.FC = () => {
               anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
               <div className={classes.wrapItemMenuProfile}>
-                <div >
+                <div>
                   <Avatar
                     className={classes.avatarProfile}
                     src={isClient ? user?.avatar : undefined}
@@ -138,44 +140,40 @@ const HeaderPage: React.FC = () => {
               </div>
 
               <Divider />
-              <MenuItem className={classes.menuItemHelp} onClick={handleClickMyAccount}>{'Tài khoản của tôi'}</MenuItem>
-              <MenuItem
-                onClick={handleClickSinUp}
-                className={classes.menuItemHelp}
-              >
-                {'Tạo tài khoản cho học sinh'}
-              </MenuItem>
-              <MenuItem
-                onClick={handleClickClassManage}
-                className={classes.menuItemHelp}
-              >
-                {'Tạo khối lớp và lớp học'}
-              </MenuItem>
 
-              <MenuItem
-                onClick={handleClickAddStudentToClass}
-                className={classes.menuItemHelp}
-              >
-                {'Thêm học sinh vào lớp học'}
-              </MenuItem>
+              {/* Only show if user.role !== 1 */}
+              {user?.role !== 1 && (
+                <>
+                  <MenuItem className={classes.menuItemHelp} onClick={handleClickMyAccount}>
+                    {'Tài khoản của tôi'}
+                  </MenuItem>
 
-              <MenuItem
-                onClick={handleClickSubject}
-                className={classes.menuItemHelp}
-              >
-                {'Quản lý môn học'}
-              </MenuItem>
+                  <MenuItem onClick={handleClickSinUp} className={classes.menuItemHelp}>
+                    {'Tạo tài khoản cho học sinh'}
+                  </MenuItem>
 
+                  <MenuItem onClick={handleClickClassManage} className={classes.menuItemHelp}>
+                    {'Tạo khối lớp và lớp học'}
+                  </MenuItem>
 
-              <MenuItem
-                onClick={handleClickSubjectScore}
-                className={classes.menuItemHelp}
-              >
-                {'Nhập điểm môn học cho học sinh'}
-              </MenuItem>
-              <Divider />
+                  <MenuItem onClick={handleClickAddStudentToClass} className={classes.menuItemHelp}>
+                    {'Thêm học sinh vào lớp học'}
+                  </MenuItem>
+
+                  <MenuItem onClick={handleClickSubject} className={classes.menuItemHelp}>
+                    {'Quản lý môn học'}
+                  </MenuItem>
+
+                  <MenuItem onClick={handleClickSubjectScore} className={classes.menuItemHelp}>
+                    {'Nhập điểm môn học cho học sinh'}
+                  </MenuItem>
+                  <Divider />
+                </>
+              )}
+
               <MenuItem onClick={handleLogOut}>{'Đăng xuất'}</MenuItem>
             </Menu>
+
           </div>
         </Toolbar>
       </AppBar>
