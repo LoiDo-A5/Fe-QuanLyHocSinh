@@ -87,6 +87,7 @@ async function refreshToken() {
       },
     }
   );
+  console.log("1111111111111", response.data);
 
   return response.data;
 }
@@ -102,17 +103,12 @@ async function axiosCall(method, ...args) {
   try {
     response = await axios[method](...args);
   } catch (error) {
-    if (
-      error.response &&
-      error.response.status === 401 &&
-      ((Array.isArray(error.response.data.messages) &&
-        error.response.data.messages[0]?.message === "Token is expired") ||
-        error.response.data.detail === "Token is expired")
-    ) {
+    if (error.response && error.response.status === 401) {
       try {
         const { access, refresh } = await refreshToken();
         reactLocalStorage.set("accessToken", access);
         reactLocalStorage.set("refreshToken", refresh);
+        console.log("22222222222222222222");
         axios.defaults.headers["Authorization"] = `Bearer ${access}`;
         response = await axios[method](...args);
       } catch (refreshError) {
