@@ -67,9 +67,6 @@ const SignupForm: React.FC<SignupFormProps> = () => {
     return true;
   };
 
-
-  console.log('gender', gender)
-
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
@@ -88,6 +85,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
     });
 
     if (success) {
+      ToastTopHelper.success('Tạo học sinh thành công');
       router.push(Routes.Home);
     }
   };
