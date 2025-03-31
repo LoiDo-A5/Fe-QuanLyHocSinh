@@ -17,7 +17,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
   const router = useRouter();
 
   const [fullName, setFullName] = useState<string>("");
-  const [gender, setGender] = useState<any>(0);
+  const [gender, setGender] = useState<any>(1);
   const [birthDate, setBirthDate] = useState<any>("");
   const [address, setAddress] = useState<string>("");
 
@@ -82,7 +82,7 @@ const SignupForm: React.FC<SignupFormProps> = () => {
       email,
       password1: password,
       password2: confirmPassword,
-      gender,
+      gender: 1 ? 0 : 1,
       birthday: birthDate,
       address,
     });
@@ -117,8 +117,8 @@ const SignupForm: React.FC<SignupFormProps> = () => {
               onChange={(e) => setGender(e.target.value)}
               label="Giới tính"
             >
-              <MenuItem value={0}>Nam giới</MenuItem>
-              <MenuItem value={1}>Nữ giới</MenuItem>
+              <MenuItem value={1}>Nam giới</MenuItem>
+              <MenuItem value={2}>Nữ giới</MenuItem>
             </Select>
           </FormControl>
           <TextField
