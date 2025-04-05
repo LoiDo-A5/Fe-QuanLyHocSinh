@@ -11,7 +11,7 @@ interface ClassData {
     level: number;
     class_name: string;
     number_of_students: number;
-    level_name: string;  // Add level_name to the ClassData type
+    level_name: string;
 }
 
 const ClassSettingsPage: React.FC = () => {
@@ -31,17 +31,16 @@ const ClassSettingsPage: React.FC = () => {
         } else {
             ToastTopHelper.error('Không thể tải dữ liệu lớp học.');
         }
-        setLoading(false); // Stop loading
+        setLoading(false);
     };
 
     useEffect(() => {
         fetchClasses();
 
-        // Fetch level data (this could be a separate endpoint)
         const fetchLevels = async () => {
-            const { success, data } = await axiosGet(API.CLASS.LEVELS); // Replace with the correct endpoint
+            const { success, data } = await axiosGet(API.CLASS.LEVELS);
             if (success) {
-                setLevels(data);  // Set available levels
+                setLevels(data);
             } else {
                 ToastTopHelper.error('Không thể tải dữ liệu cấp lớp.');
             }
@@ -49,24 +48,21 @@ const ClassSettingsPage: React.FC = () => {
         fetchLevels();
     }, []);
 
-    // Handle class selection to edit
     const handleClassSelect = (classInfo: ClassData) => {
         setSelectedClass(classInfo);
         setUpdatedClassName(classInfo.class_name);
         setUpdatedStudentCount(classInfo.number_of_students);
     };
 
-    // Save the updated class information
     const handleSave = async () => {
         if (!selectedClass) return;
 
-        setLoading(true); // Start loading
+        setLoading(true);
 
-        // Include the `level` along with class_name and number_of_students
         const { success, data } = await axiosPut(`${API.CLASS.NAMES}${selectedClass.id}/`, {
             class_name: updatedClassName,
             number_of_students: updatedStudentCount,
-            level: selectedClass.level, // Ensure that `level` is included
+            level: selectedClass.level,
         });
 
         if (success) {
@@ -100,7 +96,7 @@ const ClassSettingsPage: React.FC = () => {
                                             fullWidth
                                             variant="outlined"
                                             onClick={() => handleClassSelect(classInfo)}
-                                            disabled={loading} // Disable buttons while loading
+                                            disabled={loading}
                                         >
                                             {`${classInfo.level_name} ${classInfo.class_name}`}
                                         </Button>
