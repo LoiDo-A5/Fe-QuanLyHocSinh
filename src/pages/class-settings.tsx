@@ -89,7 +89,7 @@ const ClassSettingsPage: React.FC = () => {
     return (
         <PrivateRoute>
             <Container className={classes.background}>
-                <Typography variant="h5" gutterBottom style={{ marginBottom: 30, marginLeft: -20 }}>
+                <Typography variant="h4" gutterBottom style={{ marginBottom: 30, marginLeft: -25 }}>
                     Quản Lý Lớp Học
                 </Typography>
                 <Grid container spacing={3}>

@@ -78,7 +78,7 @@ const SystemSettingPage: React.FC = () => {
   return (
     <PrivateRoute>
       <Container className={classes.background}>
-        <Typography variant="h5" gutterBottom>
+        <Typography variant="h4" gutterBottom>
           Cài Đặt tuổi tối thiểu, tuổi tối đa, sĩ số tối đa của các lớp
         </Typography>
         <Grid container spacing={3}>
