@@ -10,9 +10,11 @@ const SystemSettingPage: React.FC = () => {
   const classes = useStyles();
   const [minAge, setMinAge] = useState<number>(15);
   const [maxAge, setMaxAge] = useState<number>(20);
+  const [maxStudentsPerClass, setMaxStudentsPerClass] = useState<number>(40);
 
   const [minAgeError, setMinAgeError] = useState('');
   const [maxAgeError, setMaxAgeError] = useState('');
+  const [maxStudentsError, setMaxStudentsError] = useState('');
 
   useEffect(() => {
     const fetchSetting = async () => {
@@ -20,6 +22,7 @@ const SystemSettingPage: React.FC = () => {
       if (success) {
         setMinAge(data.min_student_age);
         setMaxAge(data.max_student_age);
+        setMaxStudentsPerClass(data.max_students_per_class);
       }
     };
     fetchSetting();
@@ -48,6 +51,13 @@ const SystemSettingPage: React.FC = () => {
       isValid = false;
     }
 
+    if (maxStudentsPerClass <= 0) {
+      setMaxStudentsError('Sĩ số tối đa phải lớn hơn 0');
+      isValid = false;
+    } else {
+      setMaxStudentsError('');
+    }
+
     return isValid;
   };
 
@@ -56,7 +66,8 @@ const SystemSettingPage: React.FC = () => {
 
     const { success } = await axiosPut(API.SETTING.SYSTEM, {
       min_student_age: minAge,
-      max_student_age: maxAge
+      max_student_age: maxAge,
+      max_students_per_class: maxStudentsPerClass,
     });
 
     if (success) {
@@ -91,6 +102,17 @@ const SystemSettingPage: React.FC = () => {
               onChange={(e) => setMaxAge(Number(e.target.value))}
               error={!!maxAgeError}
               helperText={maxAgeError}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Sĩ số tối đa của lớp"
+              type="number"
+              value={maxStudentsPerClass}
+              onChange={(e) => setMaxStudentsPerClass(Number(e.target.value))}
+              error={!!maxStudentsError}
+              helperText={maxStudentsError}
             />
           </Grid>
           <Grid item xs={12}>
