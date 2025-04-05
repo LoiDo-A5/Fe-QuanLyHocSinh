@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Container, TextField, Typography, Grid, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
-import { axiosGet, axiosPut } from '@/utils/apis/axios';
+import { axiosGet, axiosPut, axiosDelete } from '@/utils/apis/axios'; // You need to implement axiosDelete
 import API from '@/configs/API';
 import { ToastTopHelper } from '@/utils/utils';
 import PrivateRoute from '@/commons/PrivateRoute';
@@ -20,12 +20,12 @@ const ClassSettingsPage: React.FC = () => {
     const [updatedClassName, setUpdatedClassName] = useState<string>('');
     const [updatedStudentCount, setUpdatedStudentCount] = useState<number>(0);
     const [selectedClass, setSelectedClass] = useState<ClassData | null>(null);
-    const [loading, setLoading] = useState<boolean>(false); // Loading state for saving
-    const [levels, setLevels] = useState<{ id: number, level_name: string }[]>([]); // Levels data
+    const [loading, setLoading] = useState<boolean>(false);
+    const [levels, setLevels] = useState<{ id: number, level_name: string }[]>([]);
 
     const fetchClasses = async () => {
-        setLoading(true); // Start loading
-        const { success, data } = await axiosGet(API.CLASS.NAMES); // Fetching class names
+        setLoading(true);
+        const { success, data } = await axiosGet(API.CLASS.NAMES);
         if (success) {
             setClassData(data);
         } else {
@@ -66,17 +66,24 @@ const ClassSettingsPage: React.FC = () => {
         });
 
         if (success) {
-            fetchClasses()
+            fetchClasses();
             ToastTopHelper.success('Cập nhật lớp thành công!');
-            // Update the classData state with the updated class information
-            setClassData(classData.map(item =>
-                item.id === selectedClass.id ? { ...item, class_name: updatedClassName, number_of_students: updatedStudentCount, level: selectedClass.level } : item
-            ));
         } else {
             ToastTopHelper.error('Cập nhật lớp không thành công.');
         }
 
-        setLoading(false); // Stop loading
+        setLoading(false);
+    };
+
+    const handleDelete = async (id: number) => {
+        if (window.confirm("Bạn chắc chắn muốn xóa lớp học này?")) {
+            setLoading(true);
+            const { success } = await axiosDelete(`${API.CLASS.NAMES}${id}/`);
+            ToastTopHelper.success('Lớp học đã được xóa!');
+            setClassData(classData.filter((item) => item.id !== id)); // Remove deleted class from UI
+            fetchClasses();
+            setLoading(false);
+        }
     };
 
     return (
@@ -100,12 +107,20 @@ const ClassSettingsPage: React.FC = () => {
                                         >
                                             {`${classInfo.level_name} ${classInfo.class_name}`}
                                         </Button>
+                                        <Button
+                                            variant="outlined"
+                                            color="secondary"
+                                            onClick={() => handleDelete(classInfo.id)}
+                                            disabled={loading}
+                                            style={{ marginTop: 10 }}
+                                        >
+                                            Xóa
+                                        </Button>
                                     </Grid>
                                 ))}
                             </Grid>
                         </Grid>
                     </Grid>
-
 
                     {selectedClass && (
                         <>
@@ -149,7 +164,7 @@ const ClassSettingsPage: React.FC = () => {
                                     variant="contained"
                                     fullWidth
                                     onClick={handleSave}
-                                    disabled={loading} // Disable the save button while loading
+                                    disabled={loading}
                                 >
                                     {loading ? 'Đang lưu...' : 'Lưu thay đổi'}
                                 </Button>
