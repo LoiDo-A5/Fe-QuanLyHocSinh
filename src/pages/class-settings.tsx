@@ -23,18 +23,18 @@ const ClassSettingsPage: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false); // Loading state for saving
     const [levels, setLevels] = useState<{ id: number, level_name: string }[]>([]); // Levels data
 
-    // Fetch class data from API
+    const fetchClasses = async () => {
+        setLoading(true); // Start loading
+        const { success, data } = await axiosGet(API.CLASS.NAMES); // Fetching class names
+        if (success) {
+            setClassData(data);
+        } else {
+            ToastTopHelper.error('Không thể tải dữ liệu lớp học.');
+        }
+        setLoading(false); // Stop loading
+    };
+
     useEffect(() => {
-        const fetchClasses = async () => {
-            setLoading(true); // Start loading
-            const { success, data } = await axiosGet(API.CLASS.NAMES); // Fetching class names
-            if (success) {
-                setClassData(data);
-            } else {
-                ToastTopHelper.error('Không thể tải dữ liệu lớp học.');
-            }
-            setLoading(false); // Stop loading
-        };
         fetchClasses();
 
         // Fetch level data (this could be a separate endpoint)
@@ -70,6 +70,7 @@ const ClassSettingsPage: React.FC = () => {
         });
 
         if (success) {
+            fetchClasses()
             ToastTopHelper.success('Cập nhật lớp thành công!');
             // Update the classData state with the updated class information
             setClassData(classData.map(item =>
@@ -85,7 +86,7 @@ const ClassSettingsPage: React.FC = () => {
     return (
         <PrivateRoute>
             <Container className={classes.background}>
-                <Typography variant="h5" gutterBottom>
+                <Typography variant="h5" gutterBottom style={{ marginBottom: 30, marginLeft: -20 }}>
                     Quản Lý Lớp Học
                 </Typography>
                 <Grid container spacing={3}>
