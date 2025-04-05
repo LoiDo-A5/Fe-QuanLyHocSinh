@@ -71,6 +71,9 @@ const HeaderPage: React.FC = () => {
     router.push(Routes.SystemSettingPage);
   }
 
+  const handleClickClassSettingPage = () => {
+    router.push(Routes.ClassSettingPage);
+  }
 
   useEffect(() => {
     setIsClient(true);
@@ -173,11 +176,16 @@ const HeaderPage: React.FC = () => {
                   </MenuItem>
 
                   <MenuItem style={{
-                    wordWrap: 'break-word', 
+                    wordWrap: 'break-word',
                     whiteSpace: 'normal',
                     overflow: 'hidden',
                   }} onClick={handleClickChangeSystemAge} className={classes.menuItemHelp}>
                     {'Thay đổi tuổi tối thiểu, tuổi tối đa, sĩ số tối đa của các lớp'}
+                  </MenuItem>
+
+
+                  <MenuItem onClick={handleClickClassSettingPage} className={classes.menuItemHelp}>
+                    {'Quản Lý Lớp Học'}
                   </MenuItem>
                   <Divider />
                 </>

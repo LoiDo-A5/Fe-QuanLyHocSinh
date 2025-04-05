@@ -9,6 +9,7 @@ const Routes = {
   Subject: "/subject",
   SubjectScore: "/subject-score",
   SystemSettingPage: "/system-setting-age",
+  ClassSettingPage: "/class-settings",
 };
 
 export default Routes;
