@@ -42,6 +42,9 @@ const API = {
   SEMESTER_REPORT: {
     LIST: `${API_ROOT}/accounts/semester_report/`,
   },
+  SETTING: {
+    SYSTEM: `${API_ROOT}/accounts/system_setting/`,
+  },
 };
 
 export default API;

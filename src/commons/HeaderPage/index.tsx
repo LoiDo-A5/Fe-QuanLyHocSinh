@@ -67,6 +67,10 @@ const HeaderPage: React.FC = () => {
     router.push(Routes.SubjectScore);
   }
 
+  const handleClickChangeSystemAge = () => { 
+    router.push(Routes.SystemSettingPage);
+  }
+
 
   useEffect(() => {
     setIsClient(true);
@@ -166,6 +170,10 @@ const HeaderPage: React.FC = () => {
 
                   <MenuItem onClick={handleClickSubjectScore} className={classes.menuItemHelp}>
                     {'Nhập điểm môn học cho học sinh'}
+                  </MenuItem>
+
+                  <MenuItem onClick={handleClickChangeSystemAge} className={classes.menuItemHelp}>
+                    {'Thay đổi tuổi tối thiểu, tuổi tối đa'}
                   </MenuItem>
                   <Divider />
                 </>

@@ -8,6 +8,7 @@ const Routes = {
   AddStudentToClass: "/add-student-to-class",
   Subject: "/subject",
   SubjectScore: "/subject-score",
+  SystemSettingPage: "/system-setting-age",
 };
 
 export default Routes;

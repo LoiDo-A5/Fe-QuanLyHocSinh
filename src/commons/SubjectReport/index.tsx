@@ -14,8 +14,6 @@ const SubjectReport: React.FC = () => {
   const [subjectName, setSubjectName] = useState<string>('');
 
 
-  console.log('reportData', reportData)
-
   useEffect(() => {
     const fetchSubjects = async () => {
       const { success, data } = await axiosGet(API.SUBJECT.LIST);
