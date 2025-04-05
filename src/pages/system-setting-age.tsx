@@ -79,7 +79,7 @@ const SystemSettingPage: React.FC = () => {
     <PrivateRoute>
       <Container className={classes.background}>
         <Typography variant="h5" gutterBottom>
-          Cài Đặt Giới Hạn Tuổi Học Sinh
+          Cài Đặt tuổi tối thiểu, tuổi tối đa, sĩ số tối đa của các lớp
         </Typography>
         <Grid container spacing={3}>
           <Grid item xs={12}>
