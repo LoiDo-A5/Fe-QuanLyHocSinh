@@ -96,7 +96,6 @@ const SubjectReport: React.FC = () => {
           <TableContainer component={Paper} style={{
             maxHeight: 400,
             overflowY: 'auto',
-            marginBottom:200
           }}>
             <Table>
               <TableHead>

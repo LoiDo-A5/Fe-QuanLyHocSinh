@@ -34,13 +34,13 @@ const ListSubjectScorePage: React.FC = () => {
       ToastTopHelper.error('Vui lòng chọn lớp');
       return;
     }
-  
+
     // Kiểm tra nếu chưa chọn môn học
     if (!selectedSubject) {
       ToastTopHelper.error('Vui lòng chọn môn học');
       return;
     }
-  
+
     // Kiểm tra nếu chưa chọn học kỳ
     if (!semester) {
       ToastTopHelper.error('Vui lòng chọn học kỳ');
@@ -125,7 +125,10 @@ const ListSubjectScorePage: React.FC = () => {
 
         {/* Display Subject Scores */}
         <Grid item xs={12}>
-          <TableContainer component={Paper}>
+          <TableContainer component={Paper} style={{
+            maxHeight: 400,
+            overflowY: 'auto',
+          }}>
             <Table>
               <TableHead>
                 <TableRow>
