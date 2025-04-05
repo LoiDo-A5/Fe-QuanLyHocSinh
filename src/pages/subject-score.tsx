@@ -195,12 +195,11 @@ const SubjectScorePage: React.FC = () => {
                 onChange={(e) => {
                   const value = e.target.value;
                   if (validateNumber(value)) {
-                    setMidtermScores(parseFloat(value));
+                    setMidtermScores(parseFloat(value) || 0);
                   } else {
                     ToastTopHelper.error('Điểm phải là số từ 0 đến 10');
                   }
                 }} margin="normal"
-                type="number"
               />
             </Grid>
 
@@ -220,7 +219,6 @@ const SubjectScorePage: React.FC = () => {
                     ToastTopHelper.error('Điểm phải là số từ 0 đến 10');
                   }
                 }} margin="normal"
-                type="number"
               />
             </Grid>
 
@@ -240,7 +238,6 @@ const SubjectScorePage: React.FC = () => {
                     ToastTopHelper.error('Điểm phải là số từ 0 đến 10');
                   }
                 }} margin="normal"
-                type="number"
               />
             </Grid>
 

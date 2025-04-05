@@ -77,8 +77,14 @@ const SemesterReport: React.FC = () => {
             Học kỳ: {semester}
           </Typography>
 
-          <TableContainer component={Paper}>
-            <Table>
+          <TableContainer
+            component={Paper}
+            style={{
+              maxHeight: 400,
+              overflowY: 'auto',
+            }}
+          >
+            <Table stickyHeader>
               <TableHead>
                 <TableRow>
                   <TableCell>STT</TableCell>
@@ -103,6 +109,7 @@ const SemesterReport: React.FC = () => {
           </TableContainer>
         </>
       )}
+
     </Container>
   );
 };
